@@ -26,3 +26,6 @@ Route::controller(LoginRegisterController::class)->group(function() {
 Route::middleware('auth:sanctum')->group( function () {
     Route::post('/logout', [LoginRegisterController::class, 'logout']);
 });
+
+include 'graduados.php';
+include 'ciudades.php';
