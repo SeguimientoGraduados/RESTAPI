@@ -11,7 +11,7 @@ Como requerimientos previos se necesitan:
 2. Copiar `.env.example` en `.env` y configurar las credenciales de tu base de datos
 3. Ir a la raiz del proyecto en una terminal y correr el comando: `composer install`
 4. Setear la application key corriendo el comando: `php artisan key:generate --ansi`
-5. Correr las migraciones con el comando: `php artisan migrate`
+5. Correr las migraciones con el comando: `php artisan migrate --seed`
 6. Iniciar el servidor local con el comando: `php artisan serve`
 
 #### Autores: Dylan Hughes y Gonzalo Riquelme Ludwig

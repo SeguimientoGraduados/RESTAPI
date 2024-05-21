@@ -18,6 +18,8 @@ return new class extends Migration
 
             $table->foreign('graduado_id')->references('id')->on('graduados');
             $table->foreign('carrera_id')->references('id')->on('carreras');
+
+            $table->unique(['graduado_id', 'carrera_id']);
         });
     }
 
