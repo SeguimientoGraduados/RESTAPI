@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('anio_graduacion');
             $table->string('empresa');
             $table->unsignedBigInteger('ciudad_id');
+            $table->boolean('validado')->default('false');
+
             $table->foreign('ciudad_id')->references('id')->on('ciudades');
         });
     }

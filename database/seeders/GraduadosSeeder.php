@@ -17,6 +17,7 @@ class GraduadosSeeder extends Seeder
                 'anio_graduacion' => '2015',
                 'empresa' => 'Empresa XYZ',
                 'ciudad_id' => 1,
+                'validado' => true,
             ],
             [
                 'nombre' => 'Ana',
@@ -25,6 +26,7 @@ class GraduadosSeeder extends Seeder
                 'anio_graduacion' => '2018',
                 'empresa' => 'Empresa ABC',
                 'ciudad_id' => 2,
+                'validado' => true,
             ],
             [
                 'nombre' => 'Juan',
@@ -33,6 +35,7 @@ class GraduadosSeeder extends Seeder
                 'anio_graduacion' => '2016',
                 'empresa' => 'Empresa BB',
                 'ciudad_id' => 1,
+                'validado' => true,
             ],
             [
                 'nombre' => 'Paula',
@@ -41,6 +44,7 @@ class GraduadosSeeder extends Seeder
                 'anio_graduacion' => '2019',
                 'empresa' => 'Empresa BSAS',
                 'ciudad_id' => 6,
+                'validado' => true,
             ],
             [
                 'nombre' => 'Luis Luis',
@@ -49,6 +53,7 @@ class GraduadosSeeder extends Seeder
                 'anio_graduacion' => '2017',
                 'empresa' => 'Empresa Yanqui',
                 'ciudad_id' => 21,
+                'validado' => true,
             ],
             [
                 'nombre' => 'Barba',
@@ -57,6 +62,7 @@ class GraduadosSeeder extends Seeder
                 'anio_graduacion' => '2022',
                 'empresa' => 'Empresa Europea Foerte',
                 'ciudad_id' => 10,
+                'validado' => true,
             ],
         ];
 
