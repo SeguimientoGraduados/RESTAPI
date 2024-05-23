@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
 
 
-class RoleMiddleware
+class RolMiddleware
 {
     /**
      * Handle an incoming request.
@@ -17,7 +17,7 @@ class RoleMiddleware
      */
     public function handle(Request $request, Closure $next, ...$roles)
     {
-        if (!Auth::check() || !in_array(Auth::user()->role, $roles)) {
+        if (!Auth::check() || !in_array(Auth::user()->rol, $roles)) {
             return response()->json(['message' => 'Forbidden'], 403);
         }
 

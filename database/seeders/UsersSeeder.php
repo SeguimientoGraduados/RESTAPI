@@ -20,13 +20,13 @@ class UsersSeeder extends Seeder
                 'name' => 'dylan riquelme',
                 'email' => 'dylan@test.com',
                 'password' => Hash::make('apoyo'),
-                'role' => User::ROLE_ADMIN,
+                'rol' => User::ROL_ADMIN,
             ],
             [
                 'name' => 'gonza hughes',
                 'email' => 'gonza@test.com',
                 'password' => Hash::make('apoyo'),
-                'role' => User::ROLE_USER,
+                'rol' => User::ROL_USER,
             ]
         ];
 

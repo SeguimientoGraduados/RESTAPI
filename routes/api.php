@@ -28,12 +28,12 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::post('/logout', [LoginRegisterController::class, 'logout']);
 });
 
-Route::middleware(['auth:sanctum', 'role:admin'])->prefix('admin')->group(function () {
+Route::middleware(['auth:sanctum', 'rol:admin'])->prefix('admin')->group(function () {
     // Rutas solo accesibles por administradores
-    Route::get('/getAdmin', [AdminController::class, 'obtenerAdmin']);
+    Route::get('/getAdmin', [UserController::class, 'obtenerAdmin']);
 });
 
-Route::middleware(['auth:sanctum', 'role:user'])->prefix('user')->group(function () {
+Route::middleware(['auth:sanctum', 'rol:user'])->prefix('user')->group(function () {
     // Rutas solo accesibles por usuarios
     Route::get('/getUser', [UserController::class, 'obtenerUser']);
 });

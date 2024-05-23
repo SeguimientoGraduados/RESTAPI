@@ -12,8 +12,8 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    const ROLE_USER = 'user';
-    const ROLE_ADMIN = 'admin';
+    const ROL_USER = 'user';
+    const ROL_ADMIN = 'admin';
     
     /**
      * The attributes that are mass assignable.
@@ -46,13 +46,13 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function isAdmin()
+    public function esAdmin()
     {
-        return $this->role === self::ROLE_ADMIN;
+        return $this->rol === self::ROL_ADMIN;
     }
 
-    public function isUser()
+    public function esUser()
     {
-        return $this->role === self::ROLE_USER;
+        return $this->rol === self::ROL_USER;
     }
 }
