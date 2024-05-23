@@ -19,10 +19,10 @@ class GraduadoRepository implements IGraduadoRepository
                 $query->where('anio_graduacion', $filters['anio']);
             }
 
-            /*
+            
             if (isset($filters['titulo'])) {
                 $query->whereHas('carreras', function ($q) use ($filters) {
-                    $q->where('carrera.id', $filters['titulo']);
+                    $q->where('carreras.id', $filters['titulo']);
                 });
             }
 
@@ -30,7 +30,7 @@ class GraduadoRepository implements IGraduadoRepository
                 $query->whereHas('carreras', function ($q) use ($filters) {
                     $q->where('departamento_id', $filters['departamento']);
                 });
-            }*/
+            }
         }
 
         return $query->get();
