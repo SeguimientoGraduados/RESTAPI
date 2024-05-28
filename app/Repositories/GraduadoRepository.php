@@ -44,7 +44,7 @@ class GraduadoRepository implements IGraduadoRepository
                 return new GraduadoParaMapaDTO(
                     $graduado->id,
                     $graduado->nombre,
-                    $this->formatearCarreras($graduado->carreras->toArray()), // Formatear carreras
+                    $this->formatearCarreras($graduado->carreras->toArray()),
                     $graduado->contacto,
                     $graduado->ocupacion_trabajo,
                     $graduado->ocupacion_empresa,
@@ -66,8 +66,8 @@ class GraduadoRepository implements IGraduadoRepository
                     'latitud' => $ciudad->latitud,
                     'longitud' => $ciudad->longitud,
                     'cantidad_graduados' => $graduados->count(),
+                    'graduados' => $graduadoDTOs,
                 ],
-                'graduados' => $graduadoDTOs,
             ];
         }
 
