@@ -4,8 +4,14 @@ namespace App\Repositories;
 
 use App\Repositories\Interfaces\IGraduadoRepository;
 use App\Models\Graduado;
+use App\Models\Carrera;
+use App\Models\Formacion;
+use App\Models\Contacto;
 use App\DTO\GraduadoParaMapaDTO;
 use App\DTO\CarreraDeGraduadoParaMapaDTO;
+use App\DTO\GraduadoParaRegistroDTO;
+use Illuminate\Support\Facades\DB;
+
 
 
 class GraduadoRepository implements IGraduadoRepository
@@ -74,12 +80,70 @@ class GraduadoRepository implements IGraduadoRepository
         return $result;
     }
 
-    public function registrarGraduado(array $infoGraduado)
+    public function registrarGraduado(GraduadoParaRegistroDTO $graduadoParaRegistroDTO)
     {
+        DB::beginTransaction();
+        
+        try {
+            $graduado = new Graduado();
+            $graduado->nombre = $graduadoParaRegistroDTO->nombre;
+            $graduado->dni = $graduadoParaRegistroDTO->dni;
+            $graduado->fecha_nacimiento = $graduadoParaRegistroDTO->fecha_nacimiento;
+            $graduado->ciudad_id = $graduadoParaRegistroDTO->ciudad_id;
+            $graduado->contacto = $graduadoParaRegistroDTO->contacto;
+            $graduado->ocupacion_trabajo = $graduadoParaRegistroDTO->ocupacion_trabajo;
+            $graduado->ocupacion_empresa = $graduadoParaRegistroDTO->ocupacion_empresa;
+            $graduado->ocupacion_sector = $graduadoParaRegistroDTO->ocupacion_sector;
+            $graduado->ocupacion_informacion_adicional = $graduadoParaRegistroDTO->ocupacion_informacion_adicional;
+            $graduado->experiencia_anios = $graduadoParaRegistroDTO->experiencia_anios;
+            $graduado->experiencia_informacion_adicional = $graduadoParaRegistroDTO->experiencia_informacion_adicional;
+            $graduado->habilidades_competencias = $graduadoParaRegistroDTO->habilidades_competencias;
+            $graduado->cv = $graduadoParaRegistroDTO->cv;
 
+            $graduado->save();
+
+            if ($graduadoParaRegistroDTO->carreras) {
+                foreach ($graduadoParaRegistroDTO->carreras as $carreraData) {
+                    $carrera = Carrera::find($carreraData['carrera_id']);
+                    if (!$carrera) {
+                        DB::rollBack();
+                        return ['error' => "Carrera con ID {$carreraData['carrera_id']} no encontrada"];
+                    }
+                    $graduado->carreras()->attach($carrera->id, ['anio_graduacion' => $carreraData['anio_graduacion']]);
+                }
+            }
+
+            if ($graduadoParaRegistroDTO->formacion) {
+                foreach ($graduadoParaRegistroDTO->formacion as $formacionData) {
+                    $formacion = Formacion::firstOrCreate([
+                        'titulo' => $formacionData['titulo'],
+                        'institucion' => $formacionData['institucion'],
+                        'nivel' => $formacionData['nivel'],
+                        'graduado_id' => $graduado->id
+                    ]);
+                }
+            }
+
+            if ($graduadoParaRegistroDTO->rrss) {
+                foreach ($graduadoParaRegistroDTO->rrss as $rrssData) {
+                    $contacto = Contacto::firstOrCreate([
+                        'rrss' => $rrssData['rrss'],
+                        'url' => $rrssData['url'],
+                        'graduado_id' => $graduado->id
+                    ]);
+                }
+            }
+
+            DB::commit();
+            return ['success' => true];
+        }catch (\Exception $e) {
+            DB::rollBack();
+            return ['error' => 'Hubo un error al registrar el graduado: ' . $e->getMessage()];
+        }
     }
 
-    private function formatearCarreras(array $carreras): array {
+    private function formatearCarreras(array $carreras): array
+    {
         return array_map(function ($carrera) {
             return new CarreraDeGraduadoParaMapaDTO(
                 $carrera['id'],
