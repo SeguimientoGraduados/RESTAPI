@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('nombre');
             $table->string('dni')->unique();
             $table->date('fecha_nacimiento');
-            $table->string('anio_graduacion');
             $table->unsignedBigInteger('ciudad_id');
             $table->string('contacto')->unique();
 

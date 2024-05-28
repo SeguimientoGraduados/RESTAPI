@@ -14,9 +14,9 @@ class CarreraGraduadoSeeder extends Seeder
     public function run(): void
     {
         $relacion = [
-            ['graduado_id' => 1,'carrera_id' => 1],
-            ['graduado_id' => 2,'carrera_id' => 4],
-            ['graduado_id' => 3,'carrera_id' => 5]
+            ['graduado_id' => 1,'carrera_id' => 1, 'anio_graduacion' => '2018'],
+            ['graduado_id' => 2,'carrera_id' => 4, 'anio_graduacion' => '2021'],
+            ['graduado_id' => 3,'carrera_id' => 5, 'anio_graduacion' => '2020']
         ];
 
         DB::table('carrera_graduado')->insert($relacion);

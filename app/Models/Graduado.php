@@ -9,6 +9,11 @@ class Graduado extends Model
 {
     use HasFactory;
 
+    public function ciudad()
+    {
+        return $this->belongsTo(Ciudad::class);
+    }
+
     public function carreras()
     {
         return $this->belongsToMany(Carrera::class, 'carrera_graduado', 'graduado_id', 'carrera_id');
