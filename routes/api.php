@@ -41,3 +41,4 @@ Route::middleware(['auth:sanctum', 'rol:user'])->prefix('user')->group(function 
 
 include 'graduados.php';
 include 'ciudades.php';
+include 'carreras.php';
