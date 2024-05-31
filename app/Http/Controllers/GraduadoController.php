@@ -94,8 +94,18 @@ class GraduadoController extends Controller
         return response()->json($graduados);
     }
 
-    public function validarGraduado($id){
-        $resultado = $this->graduadoRepository->validarGraduado($id);
+    public function aprobarGraduado($id){
+        $resultado = $this->graduadoRepository->aprobarGraduado($id);
+
+        if (isset($resultado['error'])) {
+            return response()->json(['error' => $resultado['error']], 400);
+        }
+
+        return response()->json(['success' => true], 200);
+    }
+
+    public function rechazarGraduado($id){
+        $resultado = $this->graduadoRepository->rechazarGraduado($id);
 
         if (isset($resultado['error'])) {
             return response()->json(['error' => $resultado['error']], 400);

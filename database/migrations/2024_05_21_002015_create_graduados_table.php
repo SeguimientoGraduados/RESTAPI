@@ -36,7 +36,7 @@ return new class extends Migration
             
             $table->boolean('validado')->default('false');
 
-            $table->foreign('ciudad_id')->references('id')->on('ciudades');
+            $table->foreign('ciudad_id')->references('id')->on('ciudades')->onDelete('cascade');
         });
     }
 

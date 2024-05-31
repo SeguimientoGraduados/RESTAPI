@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('titulo');
             $table->enum('nivel',['secundario', 'terciario', 'universitario', 'otro']);
             
-            $table->foreign('graduado_id')->references('id')->on('graduados');
+            $table->foreign('graduado_id')->references('id')->on('graduados')->onDelete('cascade');
         });
     }
 

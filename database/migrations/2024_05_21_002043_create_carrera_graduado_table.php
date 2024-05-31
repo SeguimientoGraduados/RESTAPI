@@ -17,8 +17,8 @@ return new class extends Migration
             $table->unsignedBigInteger('carrera_id');
             $table->string('anio_graduacion');
 
-            $table->foreign('graduado_id')->references('id')->on('graduados');
-            $table->foreign('carrera_id')->references('id')->on('carreras');
+            $table->foreign('graduado_id')->references('id')->on('graduados')->onDelete('cascade');
+            $table->foreign('carrera_id')->references('id')->on('carreras')->onDelete('cascade');
 
             $table->unique(['graduado_id', 'carrera_id']);
         });

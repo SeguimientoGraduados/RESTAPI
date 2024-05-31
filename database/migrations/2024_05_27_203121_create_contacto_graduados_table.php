@@ -17,7 +17,7 @@ return new class extends Migration
             $table->enum('rrss', ['linkedin', 'twitter', 'facebook']);
             $table->string('url');
             
-            $table->foreign('graduado_id')->references('id')->on('graduados');
+            $table->foreign('graduado_id')->references('id')->on('graduados')->onDelete('cascade');
         });
     }
 

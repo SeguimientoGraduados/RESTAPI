@@ -10,6 +10,7 @@ Route::prefix('/graduados')->group(function () {
         Route::post('/', [GraduadoController::class, 'registrarNuevoGraduado']);
     });
     Route::get('/validar', [GraduadoController::class, 'obtenerGraduadosPorValidar']);
-    Route::patch('/validar/{id}', [GraduadoController::class,'validarGraduado']);
+    Route::patch('/validar/aprobar/{id}', [GraduadoController::class,'aprobarGraduado']);
+    Route::patch('/validar/rechazar/{id}', [GraduadoController::class,'rechazarGraduado']);
 });
 

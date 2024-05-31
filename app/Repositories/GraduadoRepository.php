@@ -202,7 +202,7 @@ class GraduadoRepository implements IGraduadoRepository
         return $result;
     }
 
-    public function validarGraduado($graduado_id){
+    public function aprobarGraduado($graduado_id){
         $graduado = Graduado::findOrFail($graduado_id);
         if (!$graduado){
             return ['error' => "Graduado con ID {$graduado_id} no encontrado."];
@@ -212,6 +212,15 @@ class GraduadoRepository implements IGraduadoRepository
         }
         $graduado->validado = true;
         $graduado->save();
+        return ['success' => true];
+    }
+
+    public function rechazarGraduado($graduado_id){
+        $graduado = Graduado::findOrFail($graduado_id);
+        if (!$graduado){
+            return ['error' => "Graduado con ID {$graduado_id} no encontrado."];
+        }
+        $graduado->delete();
         return ['success' => true];
     }
 }
