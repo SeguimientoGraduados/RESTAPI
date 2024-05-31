@@ -8,4 +8,6 @@ interface IGraduadoRepository
 {
     public function obtenerGraduadosConFiltros(array $filters);
     public function registrarGraduado(GraduadoParaRegistroDTO $graduadoParaRegistroDTO);
+    public function obtenerGraduadosPorValidar();
+    public function validarGraduado($graduado_id);
 }

@@ -9,5 +9,7 @@ Route::prefix('/graduados')->group(function () {
     Route::middleware('auth:sanctum')->group( function () {
         Route::post('/', [GraduadoController::class, 'registrarNuevoGraduado']);
     });
+    Route::get('/validar', [GraduadoController::class, 'obtenerGraduadosPorValidar']);
+    Route::patch('/validar/{id}', [GraduadoController::class,'validarGraduado']);
 });
 

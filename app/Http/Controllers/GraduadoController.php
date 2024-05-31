@@ -49,6 +49,9 @@ class GraduadoController extends Controller
             'rrss.*.rrss' => 'required_with:rrss|string',
             'rrss.*.url' => 'required_with:rrss|url',
             'cv' => 'nullable|string',
+            'interes_comunidad' => 'required|boolean',
+            'interes_oferta' => 'required|boolean',
+            'interes_demanda' => 'required|boolean',
         ]);
 
         $graduadoDTO = new GraduadoParaRegistroDTO(
@@ -58,6 +61,9 @@ class GraduadoController extends Controller
             $validado['ciudad_id'],
             $validado['contacto'],
             $validado['carreras'] ?? [],
+            $validado['interes_comunidad'],
+            $validado['interes_oferta'],
+            $validado['interes_demanda'],
             $validado['ocupacion_trabajo'] ?? null,
             $validado['ocupacion_empresa'] ?? null,
             $validado['ocupacion_sector'] ?? null,
@@ -67,7 +73,7 @@ class GraduadoController extends Controller
             $validado['habilidades_competencias'] ?? null,
             $validado['formacion'] ?? [],
             $validado['rrss'] ?? [],
-            $validado['cv'] ?? null
+            $validado['cv'] ?? null,
         );
 
         $result = $this->graduadoRepository->registrarGraduado($graduadoDTO);
@@ -82,4 +88,19 @@ class GraduadoController extends Controller
         ], 201);
     }
 
+
+    public function obtenerGraduadosPorValidar(Request $request){
+        $graduados = $this->graduadoRepository->obtenerGraduadosPorValidar();
+        return response()->json($graduados);
+    }
+
+    public function validarGraduado($id){
+        $resultado = $this->graduadoRepository->validarGraduado($id);
+
+        if (isset($resultado['error'])) {
+            return response()->json(['error' => $resultado['error']], 400);
+        }
+
+        return response()->json(['success' => true], 200);
+    }
 }

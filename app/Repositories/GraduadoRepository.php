@@ -10,8 +10,8 @@ use App\Models\Contacto;
 use App\DTO\GraduadoParaMapaDTO;
 use App\DTO\CarreraDeGraduadoParaMapaDTO;
 use App\DTO\GraduadoParaRegistroDTO;
+use App\DTO\GraduadoPorValidarDTO;
 use Illuminate\Support\Facades\DB;
-
 
 
 class GraduadoRepository implements IGraduadoRepository
@@ -99,6 +99,9 @@ class GraduadoRepository implements IGraduadoRepository
             $graduado->experiencia_informacion_adicional = $graduadoParaRegistroDTO->experiencia_informacion_adicional;
             $graduado->habilidades_competencias = $graduadoParaRegistroDTO->habilidades_competencias;
             $graduado->cv = $graduadoParaRegistroDTO->cv;
+            $graduado->interes_comunidad = $graduadoParaRegistroDTO->interes_comunidad;
+            $graduado->interes_oferta = $graduadoParaRegistroDTO->interes_oferta;
+            $graduado->interes_demanda = $graduadoParaRegistroDTO->interes_demanda;
 
             $graduado->save();
 
@@ -171,5 +174,44 @@ class GraduadoRepository implements IGraduadoRepository
             default:
                 return 'Experiencia no especificada';
         }
+    }
+
+    public function obtenerGraduadosPorValidar(){
+        $graduados = Graduado::where('validado','false')->with(['carreras.departamento'])->get();
+
+        $graduadosDTOs = $graduados->map(function ($graduado) {
+            return new GraduadoPorValidarDTO(
+                $graduado->nombre,
+                $graduado->dni,
+                $graduado->fecha_nacimiento,
+                $this->formatearCarreras($graduado->carreras->toArray()),
+                $graduado->ocupacion_trabajo,
+                $graduado->ocupacion_empresa,
+                $graduado->ocupacion_sector,
+                $graduado->ocupacion_informacion_adicional,
+                $graduado->experiencia_anios,
+                $graduado->habilidades_competencias,
+                $graduado->interes_comunidad,
+                $graduado->interes_oferta,
+                $graduado->interes_demanda,
+            );
+        });
+
+        $result = $graduadosDTOs->toArray();
+
+        return $result;
+    }
+
+    public function validarGraduado($graduado_id){
+        $graduado = Graduado::findOrFail($graduado_id);
+        if (!$graduado){
+            return ['error' => "Graduado con ID {$graduado_id} no encontrado."];
+        }
+        if ($graduado->validado){
+            return ['error' => "Graduado con ID {$graduado_id} ya estaba validado."];
+        }
+        $graduado->validado = true;
+        $graduado->save();
+        return ['success' => true];
     }
 }
