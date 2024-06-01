@@ -8,7 +8,7 @@ use App\Models\Carrera;
 use App\Models\Formacion;
 use App\Models\Contacto;
 use App\DTO\GraduadoParaMapaDTO;
-use App\DTO\CarreraDeGraduadoParaMapaDTO;
+use App\DTO\CarreraDeGraduadoCompletoDTO;
 use App\DTO\GraduadoParaRegistroDTO;
 use App\DTO\GraduadoPorValidarDTO;
 use Illuminate\Support\Facades\DB;
@@ -50,7 +50,7 @@ class GraduadoRepository implements IGraduadoRepository
                 return new GraduadoParaMapaDTO(
                     $graduado->id,
                     $graduado->nombre,
-                    $this->formatearCarreras($graduado->carreras->toArray()),
+                    $this->formatearCarreras($graduado->carreras),
                     $graduado->contacto,
                     $graduado->ocupacion_trabajo,
                     $graduado->ocupacion_empresa,
@@ -145,55 +145,25 @@ class GraduadoRepository implements IGraduadoRepository
         }
     }
 
-    private function formatearCarreras(array $carreras): array
-    {
-        return array_map(function ($carrera) {
-            return new CarreraDeGraduadoParaMapaDTO(
-                $carrera['id'],
-                $carrera['nombre'],
-                $carrera['departamento']['nombre']
-            );
-        }, $carreras);
-    }
-
-    private function formatearExperiencia(?string $experiencia): ?string
-    {
-        if (is_null($experiencia)) {
-            return null;
-        }
-
-        switch ($experiencia) {
-            case 'menos_2':
-                return 'Menos de 2 años';
-            case 'de_2_a_5':
-                return 'De 2 a 5 años';
-            case 'de_5_a_10':
-                return 'De 5 a 10 años';
-            case 'mas_10':
-                return 'Más de 10 años';
-            default:
-                return 'Experiencia no especificada';
-        }
-    }
-
     public function obtenerGraduadosPorValidar(){
         $graduados = Graduado::where('validado','false')->with(['carreras.departamento'])->get();
 
         $graduadosDTOs = $graduados->map(function ($graduado) {
             return new GraduadoPorValidarDTO(
+                $graduado->id,
                 $graduado->nombre,
                 $graduado->dni,
                 $graduado->fecha_nacimiento,
-                $this->formatearCarreras($graduado->carreras->toArray()),
-                $graduado->ocupacion_trabajo,
-                $graduado->ocupacion_empresa,
-                $graduado->ocupacion_sector,
-                $graduado->ocupacion_informacion_adicional,
-                $graduado->experiencia_anios,
-                $graduado->habilidades_competencias,
+                $this->formatearCarreras($graduado->carreras),
                 $graduado->interes_comunidad,
                 $graduado->interes_oferta,
                 $graduado->interes_demanda,
+                $this->formatearTrabajo($graduado->ocupacion_trabajo),
+                $graduado->ocupacion_empresa,
+                $this->formatearSectorTrabajo($graduado->ocupacion_sector),
+                $graduado->ocupacion_informacion_adicional,
+                $this->formatearExperiencia($graduado->experiencia_anios),
+                $graduado->habilidades_competencias,
             );
         });
 
@@ -222,5 +192,65 @@ class GraduadoRepository implements IGraduadoRepository
         }
         $graduado->delete();
         return ['success' => true];
+    }
+
+    private function formatearCarreras($carreras): array
+    {
+        return $carreras->map(function ($carrera) {
+            return new CarreraDeGraduadoCompletoDTO(
+                $carrera->id,
+                $carrera->nombre,
+                $carrera->pivot->anio_graduacion,
+                $carrera->departamento->nombre,
+            );
+        })->toArray();
+    }
+
+    private function formatearExperiencia(?string $experiencia): ?string
+    {
+        if (is_null($experiencia)) {
+            return null;
+        }
+
+        switch ($experiencia) {
+            case 'menos_2':
+                return 'Menos de 2 años';
+            case 'de_2_a_5':
+                return 'De 2 a 5 años';
+            case 'de_5_a_10':
+                return 'De 5 a 10 años';
+            case 'mas_10':
+                return 'Más de 10 años';
+            default:
+                return 'Experiencia no especificada';
+        }
+    }
+
+    private function formatearTrabajo(?string $trabajo): ?string
+    {
+        if (is_null($trabajo)) {
+            return null;
+        }
+
+        if ($trabajo == "rel_dependencia") {
+            return 'Relación de dependencia';
+        }
+        if ($trabajo == "autonomo") {
+            return 'Autónomo';
+        }
+    }
+
+    private function formatearSectorTrabajo(?string $sector): ?string
+    {
+        if (is_null($sector)) {
+            return null;
+        }
+
+        if ($sector == "publico") {
+            return 'Público';
+        }
+        if ($sector == "privado") {
+            return 'Privado';
+        }
     }
 }

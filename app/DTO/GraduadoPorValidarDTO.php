@@ -4,6 +4,7 @@ namespace App\DTO;
 
 class GraduadoPorValidarDTO
 {
+    public $id;
     public string $nombre;
     public string $dni;
     public string $fecha_nacimiento;
@@ -18,6 +19,7 @@ class GraduadoPorValidarDTO
     public bool $interes_oferta;
     public bool $interes_demanda;
     public function __construct(
+        int $id,
         string $nombre,
         string $dni,
         string $fecha_nacimiento,
@@ -32,6 +34,7 @@ class GraduadoPorValidarDTO
         ?string $experiencia_anios = null,
         ?string $habilidades_competencias = null,
     ) {
+        $this->id = $id;
         $this->nombre = $nombre;
         $this->dni = $dni;
         $this->fecha_nacimiento = $fecha_nacimiento;

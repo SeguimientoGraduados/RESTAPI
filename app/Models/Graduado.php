@@ -17,6 +17,6 @@ class Graduado extends Model
 
     public function carreras()
     {
-        return $this->belongsToMany(Carrera::class, 'carrera_graduado', 'graduado_id', 'carrera_id');
+        return $this->belongsToMany(Carrera::class, 'carrera_graduado', 'graduado_id', 'carrera_id')->withPivot('anio_graduacion');
     }
 }

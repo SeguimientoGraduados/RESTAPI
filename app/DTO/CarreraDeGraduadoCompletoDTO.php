@@ -2,19 +2,23 @@
 
 namespace App\DTO;
 
-class CarreraDeGraduadoParaMapaDTO
+class CarreraDeGraduadoCompletoDTO
 {
     public int $id;
     public string $nombre;
+    public string $anio_graduacion;
     public string $departamento;
 
     public function __construct(
         int $id,
         string $nombre,
-        string $departamento
+        string $anio_graduacion,
+        string $departamento,
+        
     ) {
         $this->id = $id;
         $this->nombre = $nombre;
+        $this->anio_graduacion = $anio_graduacion;
         $this->departamento = $departamento;
     }
 }

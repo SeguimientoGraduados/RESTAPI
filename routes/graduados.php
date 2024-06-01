@@ -11,6 +11,6 @@ Route::prefix('/graduados')->group(function () {
     });
     Route::get('/validar', [GraduadoController::class, 'obtenerGraduadosPorValidar']);
     Route::patch('/validar/aprobar/{id}', [GraduadoController::class,'aprobarGraduado']);
-    Route::patch('/validar/rechazar/{id}', [GraduadoController::class,'rechazarGraduado']);
+    Route::delete('/validar/rechazar/{id}', [GraduadoController::class,'rechazarGraduado']);
 });
 
