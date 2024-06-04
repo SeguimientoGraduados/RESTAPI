@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use App\Repositories\Interfaces\IGraduadoRepository;
 use App\DTO\GraduadoParaRegistroDTO;
 
@@ -89,12 +88,14 @@ class GraduadoController extends Controller
     }
 
 
-    public function obtenerGraduadosPorValidar(Request $request){
+    public function obtenerGraduadosPorValidar(Request $request)
+    {
         $graduados = $this->graduadoRepository->obtenerGraduadosPorValidar();
         return response()->json($graduados);
     }
 
-    public function aprobarGraduado($id){
+    public function aprobarGraduado($id)
+    {
         $resultado = $this->graduadoRepository->aprobarGraduado($id);
 
         if (isset($resultado['error'])) {
@@ -104,7 +105,8 @@ class GraduadoController extends Controller
         return response()->json(['success' => true], 200);
     }
 
-    public function rechazarGraduado($id){
+    public function rechazarGraduado($id)
+    {
         $resultado = $this->graduadoRepository->rechazarGraduado($id);
 
         if (isset($resultado['error'])) {
@@ -112,5 +114,44 @@ class GraduadoController extends Controller
         }
 
         return response()->json(['success' => true], 200);
+    }
+
+    public function obtenerEnumerados()
+    {
+        $ocupacion_trabajo = [
+            ['value' => 'rel_dependencia', 'label' => 'Relación de dependencia'],
+            ['value' => 'autonomo', 'label' => 'Autónomo']
+        ];
+        $ocupacion_sector = [
+            'Privado',
+            'Público'
+        ];
+        $exp_anios = [
+            ['value' => 'menos_2', 'label' => 'Menos de 2 años'],
+            ['value' => 'de_2_a_5', 'label' => 'De 2 a 5 años'],
+            ['value' => 'de_5_a_10', 'label' => 'De 5 a 10 años'],
+            ['value' => 'mas_10', 'label' => 'Más de 10 años']
+        ];
+        $rrss = [
+            ['value' => 'linkedin', 'label' => 'LinkedIn'],
+            ['value' => 'twitter', 'label' => 'Twitter'],
+            ['value' => 'facebook', 'label' => 'Facebook']
+        ];
+        $nivel_formacion = [
+            ['value' => 'secundario', 'label' => 'Secundario'],
+            ['value' => 'terciario', 'label' => 'Terciario'],
+            ['value' => 'universitario', 'label' => 'Universitario'],
+            ['value' => 'otro', 'label' => 'Otro']
+        ];
+
+        $enumerados = [
+            'ocupacion_trabajo' => $ocupacion_trabajo,
+            'ocupacion_sector' => $ocupacion_sector,
+            'exp_anios' => $exp_anios,
+            'rrss' => $rrss,
+            'nivel_formacion' => $nivel_formacion,
+        ];
+
+        return json_encode($enumerados, JSON_UNESCAPED_UNICODE);
     }
 }
