@@ -105,23 +105,20 @@ class GraduadoRepository implements IGraduadoRepository
             $graduado->interes_oferta = $graduadoParaRegistroDTO->interes_oferta;
             $graduado->interes_demanda = $graduadoParaRegistroDTO->interes_demanda;
 
-            if ($graduadoParaRegistroDTO->ciudad) {
-                $ciudadData = $graduadoParaRegistroDTO->ciudad[0];
-                $ciudad = Ciudad::where('nombre', $ciudadData['nombre'])->first();
-                if (!$ciudad) {
-                    $ciudadDTO = new CiudadDeGraduadoParaRegistroDTO(
-                        $ciudadData['nombre'],
-                        $ciudadData['latitud'],
-                        $ciudadData['longitud']
-                    );
-                    $ciudad = Ciudad::create([
-                        'nombre' => $ciudadDTO->nombre,
-                        'latitud' => $ciudadDTO->latitud,
-                        'longitud' => $ciudadDTO->longitud
-                    ]);
+            $ciudadDTO = new CiudadDeGraduadoParaRegistroDTO(
+                $graduadoParaRegistroDTO->ciudad[0]['nombre'],
+                $graduadoParaRegistroDTO->ciudad[0]['latitud'],
+                $graduadoParaRegistroDTO->ciudad[0]['longitud']
+            );
 
-                }
-
+            $ciudad = Ciudad::where('nombre', $ciudadDTO->nombre)->first();
+            if (!$ciudad) {
+                $ciudad = Ciudad::create([
+                    'nombre' => $ciudadDTO->nombre,
+                    'latitud' => $ciudadDTO->latitud,
+                    'longitud' => $ciudadDTO->longitud
+                ]);
+                
                 $graduado->ciudad_id = $ciudad->id;
             }
             $graduado->save();
