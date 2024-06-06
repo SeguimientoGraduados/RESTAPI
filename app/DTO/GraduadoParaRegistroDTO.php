@@ -7,7 +7,7 @@ class GraduadoParaRegistroDTO
     public string $nombre;
     public string $dni;
     public string $fecha_nacimiento;
-    public int $ciudad_id;
+    public array $ciudad;
     public string $contacto;
     public ?array $carreras;
     public ?string $ocupacion_trabajo;
@@ -28,7 +28,7 @@ class GraduadoParaRegistroDTO
         string $nombre,
         string $dni,
         string $fecha_nacimiento,
-        int $ciudad_id,
+        array $ciudad,
         string $contacto,
         array $carreras,
         bool $interes_comunidad,
@@ -48,7 +48,7 @@ class GraduadoParaRegistroDTO
         $this->nombre = $nombre;
         $this->dni = $dni;
         $this->fecha_nacimiento = $fecha_nacimiento;
-        $this->ciudad_id = $ciudad_id;
+        $this->ciudad = $ciudad;
         $this->contacto = $contacto;
         $this->carreras = $carreras;
         $this->ocupacion_trabajo = $ocupacion_trabajo;

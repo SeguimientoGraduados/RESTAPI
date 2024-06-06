@@ -5,10 +5,12 @@ namespace App\Repositories;
 use App\Repositories\Interfaces\IGraduadoRepository;
 use App\Models\Graduado;
 use App\Models\Carrera;
+use App\Models\Ciudad;
 use App\Models\Formacion;
 use App\Models\Contacto;
 use App\DTO\GraduadoParaMapaDTO;
 use App\DTO\CarreraDeGraduadoCompletoDTO;
+use App\DTO\CiudadDeGraduadoParaRegistroDTO;
 use App\DTO\GraduadoParaRegistroDTO;
 use App\DTO\GraduadoPorValidarDTO;
 use Illuminate\Support\Facades\DB;
@@ -83,13 +85,13 @@ class GraduadoRepository implements IGraduadoRepository
     public function registrarGraduado(GraduadoParaRegistroDTO $graduadoParaRegistroDTO)
     {
         DB::beginTransaction();
-        
+
         try {
+
             $graduado = new Graduado();
             $graduado->nombre = $graduadoParaRegistroDTO->nombre;
             $graduado->dni = $graduadoParaRegistroDTO->dni;
             $graduado->fecha_nacimiento = $graduadoParaRegistroDTO->fecha_nacimiento;
-            $graduado->ciudad_id = $graduadoParaRegistroDTO->ciudad_id;
             $graduado->contacto = $graduadoParaRegistroDTO->contacto;
             $graduado->ocupacion_trabajo = $graduadoParaRegistroDTO->ocupacion_trabajo;
             $graduado->ocupacion_empresa = $graduadoParaRegistroDTO->ocupacion_empresa;
@@ -103,6 +105,25 @@ class GraduadoRepository implements IGraduadoRepository
             $graduado->interes_oferta = $graduadoParaRegistroDTO->interes_oferta;
             $graduado->interes_demanda = $graduadoParaRegistroDTO->interes_demanda;
 
+            if ($graduadoParaRegistroDTO->ciudad) {
+                $ciudadData = $graduadoParaRegistroDTO->ciudad[0];
+                $ciudad = Ciudad::where('nombre', $ciudadData['nombre'])->first();
+                if (!$ciudad) {
+                    $ciudadDTO = new CiudadDeGraduadoParaRegistroDTO(
+                        $ciudadData['nombre'],
+                        $ciudadData['latitud'],
+                        $ciudadData['longitud']
+                    );
+                    $ciudad = Ciudad::create([
+                        'nombre' => $ciudadDTO->nombre,
+                        'latitud' => $ciudadDTO->latitud,
+                        'longitud' => $ciudadDTO->longitud
+                    ]);
+
+                }
+
+                $graduado->ciudad_id = $ciudad->id;
+            }
             $graduado->save();
 
             if ($graduadoParaRegistroDTO->carreras) {
@@ -136,17 +157,17 @@ class GraduadoRepository implements IGraduadoRepository
                     ]);
                 }
             }
-
             DB::commit();
             return ['success' => true];
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
             return ['error' => 'Hubo un error al registrar el graduado: ' . $e->getMessage()];
         }
     }
 
-    public function obtenerGraduadosPorValidar(){
-        $graduados = Graduado::where('validado','false')->with(['carreras.departamento'])->get();
+    public function obtenerGraduadosPorValidar()
+    {
+        $graduados = Graduado::where('validado', 'false')->with(['carreras.departamento'])->get();
 
         $graduadosDTOs = $graduados->map(function ($graduado) {
             return new GraduadoPorValidarDTO(
@@ -172,12 +193,13 @@ class GraduadoRepository implements IGraduadoRepository
         return $result;
     }
 
-    public function aprobarGraduado($graduado_id){
+    public function aprobarGraduado($graduado_id)
+    {
         $graduado = Graduado::findOrFail($graduado_id);
-        if (!$graduado){
+        if (!$graduado) {
             return ['error' => "Graduado con ID {$graduado_id} no encontrado."];
         }
-        if ($graduado->validado){
+        if ($graduado->validado) {
             return ['error' => "Graduado con ID {$graduado_id} ya estaba validado."];
         }
         $graduado->validado = true;
@@ -185,9 +207,10 @@ class GraduadoRepository implements IGraduadoRepository
         return ['success' => true];
     }
 
-    public function rechazarGraduado($graduado_id){
+    public function rechazarGraduado($graduado_id)
+    {
         $graduado = Graduado::findOrFail($graduado_id);
-        if (!$graduado){
+        if (!$graduado) {
             return ['error' => "Graduado con ID {$graduado_id} no encontrado."];
         }
         $graduado->delete();
