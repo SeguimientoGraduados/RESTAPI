@@ -157,8 +157,7 @@ class GraduadoRepository implements IGraduadoRepository
         } catch (\Exception $e) {
             DB::rollBack();
             return [
-                'error' => 'Hubo un error al registrar el graduado: ' . //$e->getMessage()];
-                    json_encode($ciudad)
+                'error' => 'Hubo un error al registrar el graduado: ' . $e->getMessage()
             ];
         }
     }

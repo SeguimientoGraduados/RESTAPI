@@ -10,8 +10,7 @@ class CarreraRepository implements ICarreraRepository
 {
     public function obtenerTodasLasCarreras()
     {
-
-        $carreras = Carrera::select('id', 'nombre')->get();
+        $carreras = Carrera::select('id', 'nombre')->orderBy('nombre', 'asc')->get();
 
         $carrerasDTOs = $carreras->map(function ($carrera) {
             return new CarreraDeGraduadoParaFormularioDTO(
