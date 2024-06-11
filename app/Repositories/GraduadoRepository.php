@@ -104,9 +104,9 @@ class GraduadoRepository implements IGraduadoRepository
             $graduado->interes_demanda = $graduadoParaRegistroDTO->interes_demanda;
 
             $ciudadDTO = new CiudadDeGraduadoParaRegistroDTO(
-                $graduadoParaRegistroDTO->ciudad[0]['nombre'],
-                $graduadoParaRegistroDTO->ciudad[0]['latitud'],
-                $graduadoParaRegistroDTO->ciudad[0]['longitud']
+                $graduadoParaRegistroDTO->ciudad['nombre'],
+                $graduadoParaRegistroDTO->ciudad['latitud'],
+                $graduadoParaRegistroDTO->ciudad['longitud']
             );
 
             $ciudad = Ciudad::where('nombre', $ciudadDTO->nombre)->first();
