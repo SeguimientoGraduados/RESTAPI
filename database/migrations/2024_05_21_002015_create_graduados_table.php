@@ -25,7 +25,6 @@ return new class extends Migration
             $table->text('ocupacion_informacion_adicional'); 
 
             $table->enum('experiencia_anios', ['menos_2', 'de_2_a_5', 'de_5_a_10', 'mas_10']);
-            $table->text('experiencia_informacion_adicional');
             $table->text('habilidades_competencias');
             
             $table->string('cv')->nullable();

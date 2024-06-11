@@ -15,7 +15,6 @@ class GraduadoParaRegistroDTO
     public ?string $ocupacion_sector;
     public ?string $ocupacion_informacion_adicional;
     public ?string $experiencia_anios;
-    public ?string $experiencia_informacion_adicional;
     public ?string $habilidades_competencias;
     public ?array $formacion;
     public ?array $rrss;
@@ -39,7 +38,6 @@ class GraduadoParaRegistroDTO
         ?string $ocupacion_sector = null,
         ?string $ocupacion_informacion_adicional = null,
         ?string $experiencia_anios = null,
-        ?string $experiencia_informacion_adicional = null,
         ?string $habilidades_competencias = null,
         ?array $formacion = null,
         ?array $rrss = null,
@@ -56,7 +54,6 @@ class GraduadoParaRegistroDTO
         $this->ocupacion_sector = $ocupacion_sector;
         $this->ocupacion_informacion_adicional = $ocupacion_informacion_adicional;
         $this->experiencia_anios = $experiencia_anios;
-        $this->experiencia_informacion_adicional = $experiencia_informacion_adicional;
         $this->habilidades_competencias = $habilidades_competencias;
         $this->formacion = $formacion;
         $this->rrss = $rrss;

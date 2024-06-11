@@ -59,7 +59,6 @@ class GraduadoRepository implements IGraduadoRepository
                     $graduado->ocupacion_sector,
                     $graduado->ocupacion_informacion_adicional,
                     $this->formatearExperiencia($graduado->experiencia_anios),
-                    $graduado->experiencia_informacion_adicional,
                     $graduado->habilidades_competencias,
                     $graduado->formacion ? $graduado->formacion->toArray() : null,
                     $graduado->rrss ? $graduado->rrss->toArray() : null,
@@ -98,7 +97,6 @@ class GraduadoRepository implements IGraduadoRepository
             $graduado->ocupacion_sector = $graduadoParaRegistroDTO->ocupacion_sector;
             $graduado->ocupacion_informacion_adicional = $graduadoParaRegistroDTO->ocupacion_informacion_adicional;
             $graduado->experiencia_anios = $graduadoParaRegistroDTO->experiencia_anios;
-            $graduado->experiencia_informacion_adicional = $graduadoParaRegistroDTO->experiencia_informacion_adicional;
             $graduado->habilidades_competencias = $graduadoParaRegistroDTO->habilidades_competencias;
             $graduado->cv = $graduadoParaRegistroDTO->cv;
             $graduado->interes_comunidad = $graduadoParaRegistroDTO->interes_comunidad;
@@ -118,9 +116,9 @@ class GraduadoRepository implements IGraduadoRepository
                     'latitud' => $ciudadDTO->latitud,
                     'longitud' => $ciudadDTO->longitud
                 ]);
-                
-                $graduado->ciudad_id = $ciudad->id;
             }
+            $graduado->ciudad_id = $ciudad->id;
+
             $graduado->save();
 
             if ($graduadoParaRegistroDTO->carreras) {
@@ -158,7 +156,9 @@ class GraduadoRepository implements IGraduadoRepository
             return ['success' => true];
         } catch (\Exception $e) {
             DB::rollBack();
-            return ['error' => 'Hubo un error al registrar el graduado: ' . $e->getMessage()];
+            return [
+                'error' => 'Hubo un error al registrar el graduado: ' . $e->getMessage()
+            ];
         }
     }
 
