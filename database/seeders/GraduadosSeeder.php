@@ -64,6 +64,42 @@ class GraduadosSeeder extends Seeder
                 'interes_oferta' => false,
                 'interes_demanda' => false,
                 'validado' => true
+            ],
+            [
+                'nombre' => 'LeBron James',
+                'dni' => '56789012',
+                'fecha_nacimiento' => Carbon::parse('1984-12-30'),
+                'ciudad_id' => 6,
+                'contacto' => 'lebron.james@nba.com',
+                'ocupacion_trabajo' => 'rel_dependencia',
+                'ocupacion_empresa' => 'Los Angeles Lakers',
+                'ocupacion_sector' => 'privado',
+                'ocupacion_informacion_adicional' => 'Jugador profesional de baloncesto.',
+                'experiencia_anios' => 'mas_10',
+                'habilidades_competencias' => 'Baloncesto, Liderazgo, Entrenamiento',
+                'cv'=> null,
+                'interes_comunidad' => true,
+                'interes_oferta' => true,
+                'interes_demanda' => false,
+                'validado' => false
+            ],
+            [
+                'nombre' => 'Serena Williams',
+                'dni' => '67890123',
+                'fecha_nacimiento' => Carbon::parse('1981-09-26'),
+                'ciudad_id' => 7,
+                'contacto' => 'serena.williams@wta.com',
+                'ocupacion_trabajo' => 'autonomo',
+                'ocupacion_empresa' => null,
+                'ocupacion_sector' => 'privado',
+                'ocupacion_informacion_adicional' => 'Tenista profesional.',
+                'experiencia_anios' => 'mas_10',
+                'habilidades_competencias' => 'Tenis, Entrenamiento, Motivación',
+                'cv'=> null,
+                'interes_comunidad' => true,
+                'interes_oferta' => false,
+                'interes_demanda' => true,
+                'validado' => false
             ]
         ];
 
