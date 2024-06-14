@@ -6,6 +6,7 @@ use App\Repositories\Interfaces\IGraduadoRepository;
 use App\Models\Graduado;
 use App\Models\Carrera;
 use App\Models\Ciudad;
+use App\Models\Pais;
 use App\Models\Formacion;
 use App\Models\Contacto;
 use App\DTO\GraduadoParaMapaDTO;
@@ -20,7 +21,7 @@ class GraduadoRepository implements IGraduadoRepository
 {
     public function obtenerGraduadosConFiltros($filters = [])
     {
-        $query = Graduado::where('validado', true)->with(['carreras.departamento', 'ciudad']);
+        $query = Graduado::where('validado', true)->with(['carreras.departamento', 'ciudad.pais']);
 
         if (!empty($filters)) {
             if (isset($filters['nombre'])) {
@@ -70,6 +71,7 @@ class GraduadoRepository implements IGraduadoRepository
                 'ciudad' => [
                     'id' => $ciudad->id,
                     'nombre' => $ciudad->nombre,
+                    'pais' => $ciudad->pais->nombre,
                     'latitud' => $ciudad->latitud,
                     'longitud' => $ciudad->longitud,
                     'cantidad_graduados' => $graduados->count(),
@@ -106,17 +108,21 @@ class GraduadoRepository implements IGraduadoRepository
             $ciudadDTO = new CiudadDeGraduadoParaRegistroDTO(
                 $graduadoParaRegistroDTO->ciudad['nombre'],
                 $graduadoParaRegistroDTO->ciudad['latitud'],
-                $graduadoParaRegistroDTO->ciudad['longitud']
+                $graduadoParaRegistroDTO->ciudad['longitud'],
+                $graduadoParaRegistroDTO->ciudad['pais'],
             );
 
             $ciudad = Ciudad::where('nombre', $ciudadDTO->nombre)->first();
             if (!$ciudad) {
+                $pais = Pais::firstOrCreate(['nombre' => $ciudadDTO->pais]);
                 $ciudad = Ciudad::create([
                     'nombre' => $ciudadDTO->nombre,
                     'latitud' => $ciudadDTO->latitud,
-                    'longitud' => $ciudadDTO->longitud
+                    'longitud' => $ciudadDTO->longitud,
+                    'pais_id' => $pais->id
                 ]);
             }
+
             $graduado->ciudad_id = $ciudad->id;
 
             $graduado->save();

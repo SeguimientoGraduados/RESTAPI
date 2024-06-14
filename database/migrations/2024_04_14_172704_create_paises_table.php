@@ -11,14 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ciudades', function (Blueprint $table) {
+        Schema::create('paises', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
-            $table->decimal('latitud',10,8);
-            $table->decimal('longitud',11,8);
-            $table->unsignedBigInteger('pais_id');
-            
-            $table->foreign('pais_id')->references('id')->on('paises')->onDelete('cascade');
         });
     }
 
@@ -27,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('ciudades');
+        Schema::dropIfExists('paises');
     }
 };
