@@ -14,6 +14,7 @@ use App\DTO\CarreraDeGraduadoCompletoDTO;
 use App\DTO\CiudadDeGraduadoParaRegistroDTO;
 use App\DTO\GraduadoParaRegistroDTO;
 use App\DTO\GraduadoPorValidarDTO;
+use App\DTO\PaisParaFiltroDTO;
 use Illuminate\Support\Facades\DB;
 
 
@@ -24,22 +25,10 @@ class GraduadoRepository implements IGraduadoRepository
         $query = Graduado::where('validado', true)->with(['carreras.departamento', 'ciudad.pais']);
 
         if (!empty($filters)) {
-            if (isset($filters['nombre'])) {
-                $query->where('nombre', 'like', '%' . $filters['nombre'] . '%');
-            }
-            if (isset($filters['anio'])) {
-                $query->where('anio_graduacion', $filters['anio']);
-            }
-            if (isset($filters['titulo'])) {
-                $query->whereHas('carreras', function ($q) use ($filters) {
-                    $q->where('carreras.id', $filters['titulo']);
-                });
-            }
-            if (isset($filters['departamento'])) {
-                $query->whereHas('carreras', function ($q) use ($filters) {
-                    $q->where('departamento_id', $filters['departamento']);
-                });
-            }
+            if (isset($filters['pais'])) {
+                $query->whereHas('ciudad', function ($q) use ($filters) {
+                    $q->where('pais_id', $filters['pais']);
+                });            }
         }
 
         $graduados = $query->get();
@@ -219,6 +208,27 @@ class GraduadoRepository implements IGraduadoRepository
         $graduado->delete();
         return ['success' => true];
     }
+
+    public function obtenerPaisesParaFiltrar()
+    {
+        $paisesIds = Graduado::where('validado', true)
+            ->with('ciudad.pais')
+            ->get()
+            ->pluck('ciudad.pais.id')
+            ->unique();
+
+        $paises = Pais::whereIn('id', $paisesIds)->get(['id', 'nombre']);
+
+        $paisesDTOs = $paises->map(function ($pais) {
+            return new PaisParaFiltroDTO(
+                $pais->id,
+                $pais->nombre
+            );
+        });
+
+        return $paisesDTOs;
+    }
+
 
     private function formatearCarreras($carreras): array
     {

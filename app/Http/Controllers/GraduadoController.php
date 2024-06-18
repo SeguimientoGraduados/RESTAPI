@@ -17,7 +17,7 @@ class GraduadoController extends Controller
 
     public function obtenerGraduadosConFiltros(Request $request)
     {
-        $filters = $request->only(['nombre', 'anio', 'titulo', 'departamento']);
+        $filters = $request->only(['pais']);
         $graduados = $this->graduadoRepository->obtenerGraduadosConFiltros($filters);
         return response()->json($graduados);
     }
@@ -155,5 +155,11 @@ class GraduadoController extends Controller
         ];
 
         return json_encode($enumerados, JSON_UNESCAPED_UNICODE);
+    }
+
+    public function obtenerPaisesParaFiltrar(Request $request)
+    {
+        $paises = $this->graduadoRepository->obtenerPaisesParaFiltrar();
+        return response()->json($paises);
     }
 }
