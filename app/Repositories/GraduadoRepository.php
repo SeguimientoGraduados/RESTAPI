@@ -7,6 +7,7 @@ use App\Models\Graduado;
 use App\Models\Carrera;
 use App\Models\Ciudad;
 use App\Models\Pais;
+use App\Models\Departamento;
 use App\Models\Formacion;
 use App\Models\Contacto;
 use App\DTO\GraduadoParaMapaDTO;
@@ -15,6 +16,7 @@ use App\DTO\CiudadDeGraduadoParaRegistroDTO;
 use App\DTO\GraduadoParaRegistroDTO;
 use App\DTO\GraduadoPorValidarDTO;
 use App\DTO\PaisParaFiltroDTO;
+use App\DTO\DepartamentoParaFiltroDTO;
 use Illuminate\Support\Facades\DB;
 
 
@@ -28,7 +30,13 @@ class GraduadoRepository implements IGraduadoRepository
             if (isset($filters['pais'])) {
                 $query->whereHas('ciudad', function ($q) use ($filters) {
                     $q->where('pais_id', $filters['pais']);
-                });            }
+                });
+            }
+            if (isset($filters['departamento'])) {
+                $query->whereHas('carreras', function ($q) use ($filters) {
+                    $q->where('departamento_id', $filters['departamento']);
+                });
+            }
         }
 
         $graduados = $query->get();
@@ -209,16 +217,14 @@ class GraduadoRepository implements IGraduadoRepository
         return ['success' => true];
     }
 
-    public function obtenerPaisesParaFiltrar()
+    public function obtenerValoresParaFiltrar()
     {
-        $paisesIds = Graduado::where('validado', true)
-            ->with('ciudad.pais')
-            ->get()
-            ->pluck('ciudad.pais.id')
-            ->unique();
+        $graduados = Graduado::where('validado', true)
+            ->with(['carreras.departamento', 'ciudad.pais'])
+            ->get();
 
+        $paisesIds = $graduados->pluck('ciudad.pais.id')->unique();
         $paises = Pais::whereIn('id', $paisesIds)->get(['id', 'nombre']);
-
         $paisesDTOs = $paises->map(function ($pais) {
             return new PaisParaFiltroDTO(
                 $pais->id,
@@ -226,7 +232,21 @@ class GraduadoRepository implements IGraduadoRepository
             );
         });
 
-        return $paisesDTOs;
+        $departamentosIds = $graduados->pluck('carreras.*.departamento.id')->flatten()->unique();
+        $departamentos = Departamento::whereIn('id', $departamentosIds)->get(['id', 'nombre']);
+        $departamentosDTOs = $departamentos->map(function ($departamento) {
+            return new DepartamentoParaFiltroDTO(
+                $departamento->id,
+                $departamento->nombre
+            );
+        });
+
+        $result = [
+            'paises' => $paisesDTOs,
+            'departamentos' => $departamentosDTOs,
+        ];
+
+        return $result;
     }
 
 

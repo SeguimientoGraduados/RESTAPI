@@ -11,6 +11,6 @@ interface IGraduadoRepository
     public function obtenerGraduadosPorValidar();
     public function aprobarGraduado($id);
     public function rechazarGraduado($id);
-    public function obtenerPaisesParaFiltrar();
+    public function obtenerValoresParaFiltrar();
 
 }

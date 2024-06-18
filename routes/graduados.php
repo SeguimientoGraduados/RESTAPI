@@ -5,7 +5,7 @@ use App\Http\Controllers\GraduadoController;
 
 Route::prefix('/graduados')->group(function () {
     Route::get('/', [GraduadoController::class, 'obtenerGraduadosConFiltros']);
-    Route::get('/paises', [GraduadoController::class, 'obtenerPaisesParaFiltrar']);
+    Route::get('/filtros', [GraduadoController::class, 'obtenerValoresParaFiltrar']);
     Route::middleware('auth:sanctum')->group( function () {
         Route::post('/', [GraduadoController::class, 'registrarNuevoGraduado']);
         Route::get('/enumerados', [GraduadoController::class, 'obtenerEnumerados']);
