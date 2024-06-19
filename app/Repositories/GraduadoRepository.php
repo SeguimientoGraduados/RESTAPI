@@ -175,11 +175,11 @@ class GraduadoRepository implements IGraduadoRepository
         }
     }
 
-    public function obtenerGraduadosPorValidar()
+    public function obtenerGraduadosPorValidar($cantPagina = 10)
     {
-        $graduados = Graduado::where('validado', 'false')->with(['carreras.departamento'])->get();
+        $graduados = Graduado::where('validado', 'false')->with(['carreras.departamento'])->paginate($cantPagina);
 
-        $graduadosDTOs = $graduados->map(function ($graduado) {
+        $graduadosDTOs = $graduados->getCollection()->map(function ($graduado) {
             return new GraduadoPorValidarDTO(
                 $graduado->id,
                 $graduado->nombre,
@@ -198,9 +198,9 @@ class GraduadoRepository implements IGraduadoRepository
             );
         });
 
-        $result = $graduadosDTOs->toArray();
+        $graduados->setCollection($graduadosDTOs);
 
-        return $result;
+        return $graduados;
     }
 
     public function aprobarGraduado($graduado_id)

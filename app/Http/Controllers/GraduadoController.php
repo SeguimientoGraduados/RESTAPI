@@ -92,7 +92,8 @@ class GraduadoController extends Controller
 
     public function obtenerGraduadosPorValidar(Request $request)
     {
-        $graduados = $this->graduadoRepository->obtenerGraduadosPorValidar();
+        $cantPagina = 10;
+        $graduados = $this->graduadoRepository->obtenerGraduadosPorValidar($cantPagina);
         return response()->json($graduados);
     }
 
