@@ -37,6 +37,16 @@ class GraduadoRepository implements IGraduadoRepository
                     $q->where('departamento_id', $filters['departamento']);
                 });
             }
+            if (isset($filters['anioDesde'])) {
+                $query->whereHas('carreras', function ($q) use ($filters) {
+                    $q->where('anio_graduacion', '>=', $filters['anioDesde']);
+                });
+            }
+            if (isset($filters['anioHasta'])) {
+                $query->whereHas('carreras', function ($q) use ($filters) {
+                    $q->where('anio_graduacion', '<=', $filters['anioHasta']);
+                });
+            }
         }
 
         $graduados = $query->get();
@@ -223,32 +233,25 @@ class GraduadoRepository implements IGraduadoRepository
             ->with(['carreras.departamento', 'ciudad.pais'])
             ->get();
 
-        $paisesIds = $graduados->pluck('ciudad.pais.id')->unique();
+        $paisesIds = $graduados->pluck('ciudad.pais.id')->unique()->values();
+        $departamentosIds = $graduados->pluck('carreras.*.departamento.id')->flatten()->unique()->values();
+
         $paises = Pais::whereIn('id', $paisesIds)->get(['id', 'nombre']);
-        $paisesDTOs = $paises->map(function ($pais) {
-            return new PaisParaFiltroDTO(
-                $pais->id,
-                $pais->nombre
-            );
-        });
-
-        $departamentosIds = $graduados->pluck('carreras.*.departamento.id')->flatten()->unique();
         $departamentos = Departamento::whereIn('id', $departamentosIds)->get(['id', 'nombre']);
-        $departamentosDTOs = $departamentos->map(function ($departamento) {
-            return new DepartamentoParaFiltroDTO(
-                $departamento->id,
-                $departamento->nombre
-            );
-        });
 
-        $result = [
+        $paisesDTOs = $paises->map(fn($pais) => new PaisParaFiltroDTO($pais->id, $pais->nombre));
+        $departamentosDTOs = $departamentos->map(fn($departamento) => new DepartamentoParaFiltroDTO($departamento->id, $departamento->nombre));
+
+        $anioMin = $graduados->pluck('carreras.*.pivot.anio_graduacion')->flatten()->min();
+        $anioMax = $graduados->pluck('carreras.*.pivot.anio_graduacion')->flatten()->max();
+        $rangoAnios = ['anio_min' => $anioMin, 'anio_max' => $anioMax];
+
+        return [
             'paises' => $paisesDTOs,
             'departamentos' => $departamentosDTOs,
+            'anios' => $rangoAnios
         ];
-
-        return $result;
     }
-
 
     private function formatearCarreras($carreras): array
     {
