@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Repositories\Interfaces\IGraduadoRepository;
 use App\DTO\GraduadoParaRegistroDTO;
+use Mail;
+use App\Mail\SolicitudesCorreo;
 
 class GraduadoController extends Controller
 {
@@ -100,22 +102,24 @@ class GraduadoController extends Controller
     public function aprobarGraduado($id)
     {
         $resultado = $this->graduadoRepository->aprobarGraduado($id);
+        $graduadoMail = $this->graduadoRepository->obtenerEmailGraduado(($id));
 
         if (isset($resultado['error'])) {
             return response()->json(['error' => $resultado['error']], 400);
         }
-
+        Mail::to($graduadoMail)->send(new SolicitudesCorreo('mails.solicitudAceptada'));
         return response()->json(['success' => true], 200);
     }
 
     public function rechazarGraduado($id)
     {
         $resultado = $this->graduadoRepository->rechazarGraduado($id);
+        $graduadoMail = $this->graduadoRepository->obtenerEmailGraduado(($id));
 
         if (isset($resultado['error'])) {
             return response()->json(['error' => $resultado['error']], 400);
         }
-
+        Mail::to($graduadoMail)->send(new SolicitudesCorreo('mails.solicitudRechazada'));
         return response()->json(['success' => true], 200);
     }
 
@@ -163,4 +167,5 @@ class GraduadoController extends Controller
         $valores = $this->graduadoRepository->obtenerValoresParaFiltrar();
         return response()->json($valores);
     }
+
 }

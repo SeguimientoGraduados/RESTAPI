@@ -227,6 +227,15 @@ class GraduadoRepository implements IGraduadoRepository
         return ['success' => true];
     }
 
+    public function obtenerEmailGraduado($graduado_id)
+    {
+        $graduado = Graduado::findOrFail($graduado_id);
+        if (!$graduado) {
+            return ['error' => "Graduado con ID {$graduado_id} no encontrado."];
+        }
+        return $graduado->contacto;
+    }
+
     public function obtenerValoresParaFiltrar()
     {
         $graduados = Graduado::where('validado', true)
