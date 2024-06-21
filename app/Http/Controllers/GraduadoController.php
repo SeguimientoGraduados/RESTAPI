@@ -19,7 +19,7 @@ class GraduadoController extends Controller
 
     public function obtenerGraduadosConFiltros(Request $request)
     {
-        $filters = $request->only(['pais', 'departamento', 'anioDesde', 'anioHasta']);
+        $filters = $request->only(['pais', 'departamento', 'carrera', 'anioDesde', 'anioHasta']);
         $graduados = $this->graduadoRepository->obtenerGraduadosConFiltros($filters);
         return response()->json($graduados);
     }

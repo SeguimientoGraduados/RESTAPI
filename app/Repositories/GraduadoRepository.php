@@ -17,6 +17,7 @@ use App\DTO\GraduadoParaRegistroDTO;
 use App\DTO\GraduadoPorValidarDTO;
 use App\DTO\PaisParaFiltroDTO;
 use App\DTO\DepartamentoParaFiltroDTO;
+use App\DTO\CarreraParaFiltroDTO;
 use Illuminate\Support\Facades\DB;
 
 
@@ -35,6 +36,11 @@ class GraduadoRepository implements IGraduadoRepository
             if (isset($filters['departamento'])) {
                 $query->whereHas('carreras', function ($q) use ($filters) {
                     $q->where('departamento_id', $filters['departamento']);
+                });
+            }
+            if (isset($filters['carrera'])) {
+                $query->whereHas('carreras', function ($q) use ($filters) {
+                    $q->where('carreras.id', $filters['carrera']);
                 });
             }
             if (isset($filters['anioDesde'])) {
@@ -244,12 +250,15 @@ class GraduadoRepository implements IGraduadoRepository
 
         $paisesIds = $graduados->pluck('ciudad.pais.id')->unique()->values();
         $departamentosIds = $graduados->pluck('carreras.*.departamento.id')->flatten()->unique()->values();
+        $carrerasIds = $graduados->pluck('carreras.*.id')->flatten()->unique()->values();
 
         $paises = Pais::whereIn('id', $paisesIds)->get(['id', 'nombre']);
         $departamentos = Departamento::whereIn('id', $departamentosIds)->get(['id', 'nombre']);
+        $carreras = Carrera::whereIn('id', $carrerasIds)->get(['id', 'nombre']);
 
         $paisesDTOs = $paises->map(fn($pais) => new PaisParaFiltroDTO($pais->id, $pais->nombre));
         $departamentosDTOs = $departamentos->map(fn($departamento) => new DepartamentoParaFiltroDTO($departamento->id, $departamento->nombre));
+        $carrerasDTOs = $carreras->map(fn($carrera) => new CarreraParaFiltroDTO($carrera->id, $carrera->nombre));
 
         $anioMin = $graduados->pluck('carreras.*.pivot.anio_graduacion')->flatten()->min();
         $anioMax = $graduados->pluck('carreras.*.pivot.anio_graduacion')->flatten()->max();
@@ -258,6 +267,7 @@ class GraduadoRepository implements IGraduadoRepository
         return [
             'paises' => $paisesDTOs,
             'departamentos' => $departamentosDTOs,
+            'carreras' => $carrerasDTOs,
             'anios' => $rangoAnios
         ];
     }
