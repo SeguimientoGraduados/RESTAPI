@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Repositories\Interfaces\IGraduadoRepository;
 use App\DTO\GraduadoParaRegistroDTO;
+use App\DTO\GraduadoParaExcelDTO;
 use Mail;
 use App\Mail\SolicitudesCorreo;
+use App\Exports\GraduadosExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class GraduadoController extends Controller
 {
@@ -168,4 +171,27 @@ class GraduadoController extends Controller
         return response()->json($valores);
     }
 
+    public function obtenerGraduadosPorFiltroExportarExcel(Request $request)
+    {
+        $filters = $request->only(['pais', 'departamento', 'carrera', 'anioDesde', 'anioHasta']);
+        $ciudadesConGraduados = $this->graduadoRepository->obtenerGraduadosConFiltros($filters);
+
+        $graduadosList = [];
+
+        foreach ($ciudadesConGraduados as $ciudadData) {
+            $ciudad = $ciudadData['ciudad'];
+            $graduados = $ciudad['graduados'];
+
+            foreach ($graduados as $graduado) {
+                $graduadoDTO = new GraduadoParaExcelDTO(
+                    $graduado->nombre,
+                    $graduado->email
+                );
+
+                $graduadosList[] = $graduadoDTO;
+            }
+        }
+
+        return Excel::download(new GraduadosExport($graduadosList), 'graduados.xlsx');
+    }
 }
