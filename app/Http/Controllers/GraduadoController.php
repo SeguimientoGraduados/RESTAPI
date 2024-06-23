@@ -22,14 +22,97 @@ class GraduadoController extends Controller
 
     public function obtenerGraduadosConFiltros(Request $request)
     {
-        $filters = $request->only(['pais', 'departamento', 'carrera', 'anioDesde', 'anioHasta']);
+        $filters = $this->getRequestFilters($request);
         $graduados = $this->graduadoRepository->obtenerGraduadosConFiltros($filters);
         return response()->json($graduados);
     }
 
     public function registrarNuevoGraduado(Request $request)
     {
-        $validado = $request->validate([
+        $validado = $this->validateGraduado($request);
+
+        $graduadoDTO = $this->createGraduadoDTO($validado);
+        $result = $this->graduadoRepository->registrarGraduado($graduadoDTO);
+
+        if (isset($result['error'])) {
+            return response()->json(['error' => $result['error']], 400);
+        }
+
+        return response()->json(['message' => 'Graduado registrado exitosamente'], 201);
+    }
+
+    public function obtenerGraduadosPorValidar(Request $request)
+    {
+        $cantPagina = 10;
+        $graduados = $this->graduadoRepository->obtenerGraduadosPorValidar($cantPagina);
+        return response()->json($graduados);
+    }
+
+    public function aprobarGraduado($id)
+    {
+        return $this->cambiarEstadoGraduado($id, 'aprobarGraduado', 'solicitudAceptada');
+    }
+
+    public function rechazarGraduado($id)
+    {
+        return $this->cambiarEstadoGraduado($id, 'rechazarGraduado', 'solicitudRechazada');
+    }
+
+    public function obtenerEnumerados()
+    {
+        $enumerados = [
+            'ocupacion_trabajo' => [
+                ['value' => 'rel_dependencia', 'label' => 'Relación de dependencia'],
+                ['value' => 'autonomo', 'label' => 'Autónomo']
+            ],
+            'ocupacion_sector' => ['Privado', 'Público'],
+            'exp_anios' => [
+                ['value' => 'menos_2', 'label' => 'Menos de 2 años'],
+                ['value' => 'de_2_a_5', 'label' => 'De 2 a 5 años'],
+                ['value' => 'de_5_a_10', 'label' => 'De 5 a 10 años'],
+                ['value' => 'mas_10', 'label' => 'Más de 10 años']
+            ],
+            'rrss' => [
+                ['value' => 'linkedin', 'label' => 'LinkedIn'],
+                ['value' => 'twitter', 'label' => 'Twitter'],
+                ['value' => 'facebook', 'label' => 'Facebook']
+            ],
+            'nivel_formacion' => [
+                ['value' => 'secundario', 'label' => 'Secundario'],
+                ['value' => 'terciario', 'label' => 'Terciario'],
+                ['value' => 'universitario', 'label' => 'Universitario'],
+                ['value' => 'otro', 'label' => 'Otro']
+            ]
+        ];
+
+        return json_encode($enumerados, JSON_UNESCAPED_UNICODE);
+    }
+
+    public function obtenerValoresParaFiltrar(Request $request)
+    {
+        $filters = $this->getRequestFilters($request);
+        $valores = $this->graduadoRepository->obtenerValoresParaFiltrar($filters);
+        return response()->json($valores);
+    }
+
+    public function obtenerGraduadosPorFiltroExportarExcel(Request $request)
+    {
+        $filters = $this->getRequestFilters($request);
+        $ciudadesConGraduados = $this->graduadoRepository->obtenerGraduadosConFiltros($filters);
+
+        $graduadosList = $this->crearListaGraduadosParaExcel($ciudadesConGraduados);
+
+        return Excel::download(new GraduadosExport($graduadosList), 'graduados.xlsx');
+    }
+
+    private function getRequestFilters(Request $request)
+    {
+        return $request->only(['pais', 'departamento', 'carrera', 'anioDesde', 'anioHasta', 'interes_comunidad', 'interes_oferta', 'interes_demanda']);
+    }
+
+    private function validateGraduado(Request $request)
+    {
+        return $request->validate([
             'nombre' => 'required|regex:/^[\pL\s]+$/u|min:3',
             'contacto' => 'required|email|unique:graduados,contacto',
             'dni' => 'required|digits_between:6,9|unique:graduados,dni',
@@ -60,8 +143,11 @@ class GraduadoController extends Controller
             'interes_oferta' => 'required|boolean',
             'interes_demanda' => 'required|boolean',
         ]);
+    }
 
-        $graduadoDTO = new GraduadoParaRegistroDTO(
+    private function createGraduadoDTO(array $validado)
+    {
+        return new GraduadoParaRegistroDTO(
             $validado['nombre'],
             $validado['dni'],
             $validado['fecha_nacimiento'],
@@ -81,102 +167,23 @@ class GraduadoController extends Controller
             $validado['rrss'] ?? [],
             $validado['cv'] ?? null,
         );
-
-        $result = $this->graduadoRepository->registrarGraduado($graduadoDTO);
-
-        if (isset($result['error'])) {
-            return response()->json([
-                'error' => $result['error']
-            ], 400);
-        }
-        return response()->json([
-            'message' => 'Graduado registrado exitosamente',
-        ], 201);
     }
 
-
-    public function obtenerGraduadosPorValidar(Request $request)
+    private function cambiarEstadoGraduado($id, $metodo, $plantillaCorreo)
     {
-        $cantPagina = 10;
-        $graduados = $this->graduadoRepository->obtenerGraduadosPorValidar($cantPagina);
-        return response()->json($graduados);
-    }
-
-    public function aprobarGraduado($id)
-    {
-        $resultado = $this->graduadoRepository->aprobarGraduado($id);
-        $graduadoMail = $this->graduadoRepository->obtenerEmailGraduado(($id));
+        $resultado = $this->graduadoRepository->$metodo($id);
+        $graduadoMail = $this->graduadoRepository->obtenerEmailGraduado($id);
 
         if (isset($resultado['error'])) {
             return response()->json(['error' => $resultado['error']], 400);
         }
-        Mail::to($graduadoMail)->send(new SolicitudesCorreo('mails.solicitudAceptada'));
+
+        Mail::to($graduadoMail)->send(new SolicitudesCorreo("mails.$plantillaCorreo"));
         return response()->json(['success' => true], 200);
     }
 
-    public function rechazarGraduado($id)
+    private function crearListaGraduadosParaExcel(array $ciudadesConGraduados)
     {
-        $resultado = $this->graduadoRepository->rechazarGraduado($id);
-        $graduadoMail = $this->graduadoRepository->obtenerEmailGraduado(($id));
-
-        if (isset($resultado['error'])) {
-            return response()->json(['error' => $resultado['error']], 400);
-        }
-        Mail::to($graduadoMail)->send(new SolicitudesCorreo('mails.solicitudRechazada'));
-        return response()->json(['success' => true], 200);
-    }
-
-    public function obtenerEnumerados()
-    {
-        $ocupacion_trabajo = [
-            ['value' => 'rel_dependencia', 'label' => 'Relación de dependencia'],
-            ['value' => 'autonomo', 'label' => 'Autónomo']
-        ];
-        $ocupacion_sector = [
-            'Privado',
-            'Público'
-        ];
-        $exp_anios = [
-            ['value' => 'menos_2', 'label' => 'Menos de 2 años'],
-            ['value' => 'de_2_a_5', 'label' => 'De 2 a 5 años'],
-            ['value' => 'de_5_a_10', 'label' => 'De 5 a 10 años'],
-            ['value' => 'mas_10', 'label' => 'Más de 10 años']
-        ];
-        $rrss = [
-            ['value' => 'linkedin', 'label' => 'LinkedIn'],
-            ['value' => 'twitter', 'label' => 'Twitter'],
-            ['value' => 'facebook', 'label' => 'Facebook']
-        ];
-        $nivel_formacion = [
-            ['value' => 'secundario', 'label' => 'Secundario'],
-            ['value' => 'terciario', 'label' => 'Terciario'],
-            ['value' => 'universitario', 'label' => 'Universitario'],
-            ['value' => 'otro', 'label' => 'Otro']
-        ];
-
-        $enumerados = [
-            'ocupacion_trabajo' => $ocupacion_trabajo,
-            'ocupacion_sector' => $ocupacion_sector,
-            'exp_anios' => $exp_anios,
-            'rrss' => $rrss,
-            'nivel_formacion' => $nivel_formacion,
-        ];
-
-        return json_encode($enumerados, JSON_UNESCAPED_UNICODE);
-    }
-
-    public function obtenerValoresParaFiltrar(Request $request)
-    {
-        $filters = $request->only(['pais', 'departamento', 'carrera', 'anioDesde', 'anioHasta']);
-        $valores = $this->graduadoRepository->obtenerValoresParaFiltrar($filters);
-        return response()->json($valores);
-    }
-
-    public function obtenerGraduadosPorFiltroExportarExcel(Request $request)
-    {
-        $filters = $request->only(['pais', 'departamento', 'carrera', 'anioDesde', 'anioHasta']);
-        $ciudadesConGraduados = $this->graduadoRepository->obtenerGraduadosConFiltros($filters);
-
         $graduadosList = [];
 
         foreach ($ciudadesConGraduados as $ciudadData) {
@@ -193,6 +200,6 @@ class GraduadoController extends Controller
             }
         }
 
-        return Excel::download(new GraduadosExport($graduadosList), 'graduados.xlsx');
+        return $graduadosList;
     }
 }

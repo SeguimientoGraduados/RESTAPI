@@ -53,6 +53,15 @@ class GraduadoRepository implements IGraduadoRepository
                     $q->where('anio_graduacion', '<=', $filters['anioHasta']);
                 });
             }
+            if (isset($filters['interes_comunidad'])) {
+                $query->where('interes_comunidad', $filters['interes_comunidad']);
+            }
+            if (isset($filters['interes_oferta'])) {
+                $query->where('interes_oferta', $filters['interes_oferta']);
+            }
+            if (isset($filters['interes_demanda'])) {
+                $query->where('interes_demanda', $filters['interes_demanda']);
+            }
         }
 
         $graduados = $query->get();
@@ -273,6 +282,15 @@ class GraduadoRepository implements IGraduadoRepository
                     $q->where('anio_graduacion', '<=', $filters['anioHasta']);
                 });
             }
+            // if (isset($filters['interes_comunidad'])) {
+            //     $query->where('interes_comunidad', $filters['interes_comunidad']);
+            // }
+            // if (isset($filters['interes_oferta'])) {
+            //     $query->where('interes_oferta', $filters['interes_oferta']);
+            // }
+            // if (isset($filters['interes_demanda'])) {
+            //     $query->where('interes_demanda', $filters['interes_demanda']);
+            // }
         }
 
         $graduados = $query->get();
