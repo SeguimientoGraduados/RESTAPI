@@ -11,7 +11,7 @@ interface IGraduadoRepository
     public function obtenerGraduadosPorValidar($cantPagina);
     public function aprobarGraduado($id);
     public function rechazarGraduado($id);
-    public function obtenerValoresParaFiltrar();
+    public function obtenerValoresParaFiltrar($filters);
     public function obtenerEmailGraduado($id);
 
 }

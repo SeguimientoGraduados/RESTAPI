@@ -167,7 +167,8 @@ class GraduadoController extends Controller
 
     public function obtenerValoresParaFiltrar(Request $request)
     {
-        $valores = $this->graduadoRepository->obtenerValoresParaFiltrar();
+        $filters = $request->only(['pais', 'departamento', 'carrera', 'anioDesde', 'anioHasta']);
+        $valores = $this->graduadoRepository->obtenerValoresParaFiltrar($filters);
         return response()->json($valores);
     }
 

@@ -242,11 +242,40 @@ class GraduadoRepository implements IGraduadoRepository
         return $graduado->contacto;
     }
 
-    public function obtenerValoresParaFiltrar()
+    public function obtenerValoresParaFiltrar($filters = [])
     {
-        $graduados = Graduado::where('validado', true)
-            ->with(['carreras.departamento', 'ciudad.pais'])
-            ->get();
+        $query = Graduado::where('validado', true)
+            ->with(['carreras.departamento', 'ciudad.pais']);
+
+        if (!empty($filters)) {
+            if (isset($filters['pais'])) {
+                $query->whereHas('ciudad', function ($q) use ($filters) {
+                    $q->where('pais_id', $filters['pais']);
+                });
+            }
+            if (isset($filters['departamento'])) {
+                $query->whereHas('carreras', function ($q) use ($filters) {
+                    $q->where('departamento_id', $filters['departamento']);
+                });
+            }
+            if (isset($filters['carrera'])) {
+                $query->whereHas('carreras', function ($q) use ($filters) {
+                    $q->where('carreras.id', $filters['carrera']);
+                });
+            }
+            if (isset($filters['anioDesde'])) {
+                $query->whereHas('carreras', function ($q) use ($filters) {
+                    $q->where('anio_graduacion', '>=', $filters['anioDesde']);
+                });
+            }
+            if (isset($filters['anioHasta'])) {
+                $query->whereHas('carreras', function ($q) use ($filters) {
+                    $q->where('anio_graduacion', '<=', $filters['anioHasta']);
+                });
+            }
+        }
+
+        $graduados = $query->get();
 
         $paisesIds = $graduados->pluck('ciudad.pais.id')->unique()->values();
         $departamentosIds = $graduados->pluck('carreras.*.departamento.id')->flatten()->unique()->values();
