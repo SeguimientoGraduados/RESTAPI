@@ -263,6 +263,11 @@ class GraduadoRepository implements IGraduadoRepository
             ->with(['carreras.departamento', 'ciudad.pais']);
 
         if (!empty($filters)) {
+            if (isset($filters['ciudad'])) {
+                $query->whereHas('ciudad', function ($q) use ($filters) {
+                    $q->where('nombre', $filters['ciudad']);
+                });
+            }
             if (isset($filters['pais'])) {
                 $query->whereHas('ciudad', function ($q) use ($filters) {
                     $q->where('pais_id', $filters['pais']);
