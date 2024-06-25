@@ -107,7 +107,7 @@ class GraduadoController extends Controller
 
     private function getRequestFilters(Request $request)
     {
-        return $request->only(['pais', 'departamento', 'carrera', 'anioDesde', 'anioHasta', 'interes_comunidad', 'interes_oferta', 'interes_demanda']);
+        return $request->only(['ciudad', 'pais', 'departamento', 'carrera', 'anioDesde', 'anioHasta', 'interes_comunidad', 'interes_oferta', 'interes_demanda']);
     }
 
     private function validateGraduado(Request $request)
