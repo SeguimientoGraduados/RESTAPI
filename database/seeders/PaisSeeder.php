@@ -13,15 +13,10 @@ class PaisSeeder extends Seeder
     public function run(): void
     {
         $paises = [
-            [
-                'nombre' => 'Argentina',
-            ],
-            [
-                'nombre' => 'Estados Unidos',
-            ],
-            [
-                'nombre' => 'Italia',
-            ],
+            ['nombre' => 'Argentina'],
+            ['nombre' => 'Estados Unidos'],
+            ['nombre' => 'Italia'],
+            ['nombre' => 'Brasil'],
         ];
 
         DB::table('paises')->insert($paises);

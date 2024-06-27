@@ -24,7 +24,7 @@ return new class extends Migration
             $table->enum('ocupacion_sector', ['privado', 'publico']);
             $table->text('ocupacion_informacion_adicional')->nullable(); 
 
-            $table->enum('experiencia_anios', ['menos_2', 'de_2_a_5', 'de_5_a_10', 'mas_10']);
+            $table->enum('experiencia_anios', ['menos_5', 'de_5_a_10', 'de_10_a_20', 'mas_20']);
             $table->text('habilidades_competencias')->nullable();
             
             $table->string('cv')->nullable();

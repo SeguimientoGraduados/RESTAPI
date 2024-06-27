@@ -15,24 +15,25 @@ class FormacionGraduadoSeeder extends Seeder
     {
         $formaciones = [
             [
-                'graduado_id' => 1, 
-                'institucion' => 'Universidad de Barcelona',
-                'titulo' => 'Ingeniero de Software',
-                'nivel' => 'universitario'
-            ],
-            [
                 'graduado_id' => 2,
-                'institucion' => 'Universidad de Texas',
-                'titulo' => 'Marketing Digital',
+                'institucion' => 'Universidad de Buenos Aires',
+                'titulo' => 'Doctorado en Bioquímica',
                 'nivel' => 'universitario'
             ],
             [
-                'graduado_id' => 3,
-                'institucion' => 'Universidad Nacional de La Plata',
-                'titulo' => 'Abogado',
+                'graduado_id' => 5,
+                'institucion' => 'Autodesk',
+                'titulo' => 'Curso de AutoCAD',
+                'nivel' => 'otro'
+            ],
+            [
+                'graduado_id' => 9,
+                'institucion' => 'Universidad del CEMA',
+                'titulo' => 'Licenciatura en Economía Empresarial',
                 'nivel' => 'universitario'
             ]
         ];
+        
 
         DB::table('formacion_graduados')->insert($formaciones);
     }

@@ -262,48 +262,6 @@ class GraduadoRepository implements IGraduadoRepository
         $query = Graduado::where('validado', true)
             ->with(['carreras.departamento', 'ciudad.pais']);
 
-        if (!empty($filters)) {
-            if (isset($filters['ciudad'])) {
-                $query->whereHas('ciudad', function ($q) use ($filters) {
-                    $q->where('nombre', $filters['ciudad']);
-                });
-            }
-            if (isset($filters['pais'])) {
-                $query->whereHas('ciudad', function ($q) use ($filters) {
-                    $q->where('pais_id', $filters['pais']);
-                });
-            }
-            if (isset($filters['departamento'])) {
-                $query->whereHas('carreras', function ($q) use ($filters) {
-                    $q->where('departamento_id', $filters['departamento']);
-                });
-            }
-            if (isset($filters['carrera'])) {
-                $query->whereHas('carreras', function ($q) use ($filters) {
-                    $q->where('carreras.id', $filters['carrera']);
-                });
-            }
-            if (isset($filters['anioDesde'])) {
-                $query->whereHas('carreras', function ($q) use ($filters) {
-                    $q->where('anio_graduacion', '>=', $filters['anioDesde']);
-                });
-            }
-            if (isset($filters['anioHasta'])) {
-                $query->whereHas('carreras', function ($q) use ($filters) {
-                    $q->where('anio_graduacion', '<=', $filters['anioHasta']);
-                });
-            }
-            // if (isset($filters['interes_comunidad'])) {
-            //     $query->where('interes_comunidad', $filters['interes_comunidad']);
-            // }
-            // if (isset($filters['interes_oferta'])) {
-            //     $query->where('interes_oferta', $filters['interes_oferta']);
-            // }
-            // if (isset($filters['interes_demanda'])) {
-            //     $query->where('interes_demanda', $filters['interes_demanda']);
-            // }
-        }
-
         $graduados = $query->get();
 
         $paisesIds = $graduados->pluck('ciudad.pais.id')->unique()->values();
@@ -349,14 +307,14 @@ class GraduadoRepository implements IGraduadoRepository
         }
 
         switch ($experiencia) {
-            case 'menos_2':
-                return 'Menos de 2 años';
-            case 'de_2_a_5':
-                return 'De 2 a 5 años';
+            case 'menos_5':
+                return 'Menos de 5 años';
             case 'de_5_a_10':
                 return 'De 5 a 10 años';
-            case 'mas_10':
-                return 'Más de 10 años';
+            case 'de_10_a_20':
+                return 'De 10 a 20 años';
+            case 'mas_20':
+                return 'Más de 20 años';
             default:
                 return 'Experiencia no especificada';
         }
