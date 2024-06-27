@@ -22,10 +22,10 @@ return new class extends Migration
             $table->enum('ocupacion_trabajo', ['rel_dependencia','autonomo']);
             $table->string('ocupacion_empresa')->nullable();
             $table->enum('ocupacion_sector', ['privado', 'publico']);
-            $table->text('ocupacion_informacion_adicional'); 
+            $table->text('ocupacion_informacion_adicional')->nullable(); 
 
             $table->enum('experiencia_anios', ['menos_2', 'de_2_a_5', 'de_5_a_10', 'mas_10']);
-            $table->text('habilidades_competencias');
+            $table->text('habilidades_competencias')->nullable();
             
             $table->string('cv')->nullable();
 
