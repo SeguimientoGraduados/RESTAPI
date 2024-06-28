@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'mysql'),
+    'default' => env('DB_CONNECTION', 'pgsql'),
 
     /*
     |--------------------------------------------------------------------------
@@ -77,6 +77,21 @@ return [
             'search_path' => 'public',
             'sslmode' => 'prefer',
         ],
+
+        // 'pgsql' => [
+        //     'driver' => 'pgsql',
+        //     'key' => env('APP_KEY'),
+        //     'url' => env('SUPABASE_DATABASE_URL'),
+        //     'host' => env('SUPABASE_HOST'),
+        //     'port' => env('SUPABASE_PORT'),
+        //     'database' => env('SUPABASE_DATABASE','forge'),
+        //     'username' => env('SUPABASE_USERNAME','forge'),
+        //     'password' => env('SUPABASE_PASSWORD',''),
+        //     'charset' => 'utf8',
+        //     'prefix' => '',
+        //     'schema' => env('SUPABASE_SCHEMA'),
+        //     'sslmode' => env('SUPABASE_SSLMODE'), 
+        // ],
 
         'sqlsrv' => [
             'driver' => 'sqlsrv',

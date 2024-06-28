@@ -2,7 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProductController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\Auth\LoginRegisterController;
 
 /*
@@ -16,13 +17,15 @@ use App\Http\Controllers\Auth\LoginRegisterController;
 |
 */
 
-// Public routes of authentication
 Route::controller(LoginRegisterController::class)->group(function() {
     Route::post('/register', 'register');
     Route::post('/login', 'login');
 });
 
-// Protected route of logout
 Route::middleware('auth:sanctum')->group( function () {
     Route::post('/logout', [LoginRegisterController::class, 'logout']);
 });
+
+include 'graduados.php';
+include 'ciudades.php';
+include 'carreras.php';
