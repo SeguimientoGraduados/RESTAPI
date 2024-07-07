@@ -20,6 +20,29 @@ class GraduadoController extends Controller
         $this->graduadoRepository = $graduadoRepository;
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/graduados/filtros",
+     *     summary="Obtener graduados con filtros",
+     *     tags={"Mapa"},
+     *     @OA\Parameter(
+     *         name="filtro",
+     *         in="query",
+     *         description="Filtro para buscar graduados",
+     *         required=false,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Lista de graduados filtrados",
+     *         @OA\JsonContent(type="array", @OA\Items(type="object"))
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Error interno del servidor"
+     *     )
+     * )
+     */
     public function obtenerGraduadosConFiltros(Request $request)
     {
         $filters = $this->getRequestFilters($request);
@@ -27,6 +50,39 @@ class GraduadoController extends Controller
         return response()->json($graduados);
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/graduados",
+     *     summary="Registrar un nuevo graduado",
+     *     security={{ "bearer_token": {} }},
+     *     tags={"Registro Graduado"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="nombre", type="string"),
+     *             @OA\Property(property="apellido", type="string"),
+     *             @OA\Property(property="email", type="string"),
+     *             @OA\Property(property="carrera", type="string")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Graduado registrado exitosamente",
+     *         @OA\JsonContent(type="object", @OA\Property(property="message", type="string"))
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="No autorizado",
+     *         @OA\JsonContent(type="object", @OA\Property(property="error", type="string"))
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Error en la solicitud",
+     *         @OA\JsonContent(type="object", @OA\Property(property="error", type="string"))
+     *     )
+     * )
+     */
     public function registrarNuevoGraduado(Request $request)
     {
         $validado = $this->validateGraduado($request);
@@ -41,6 +97,28 @@ class GraduadoController extends Controller
         return response()->json(['message' => 'Graduado registrado exitosamente'], 201);
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/graduados/validar",
+     *     summary="Obtener graduados pendientes de validación",
+     *     security={{ "bearer_token": {} }},
+     *     tags={"Registro Graduado"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Lista de graduados por validar",
+     *         @OA\JsonContent(type="array", @OA\Items(type="object"))
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="No autorizado",
+     *         @OA\JsonContent(type="object", @OA\Property(property="error", type="string"))
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Error interno del servidor"
+     *     )
+     * )
+     */
     public function obtenerGraduadosPorValidar(Request $request)
     {
         $cantPagina = 10;
@@ -48,16 +126,140 @@ class GraduadoController extends Controller
         return response()->json($graduados);
     }
 
+    /**
+     * @OA\Patch(
+     *     path="/api/graduados/validar/aprobar/{id}",
+     *     summary="Aprobar un graduado",
+     *     security={{ "bearer_token": {} }},
+     *     tags={"Registro Graduado"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID del graduado a aprobar",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Graduado aprobado",
+     *         @OA\JsonContent(type="object", @OA\Property(property="message", type="string"))
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="No autorizado",
+     *         @OA\JsonContent(type="object", @OA\Property(property="error", type="string"))
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Graduado no encontrado",
+     *         @OA\JsonContent(type="object", @OA\Property(property="error", type="string"))
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Error interno del servidor"
+     *     )
+     * )
+     */
     public function aprobarGraduado($id)
     {
         return $this->cambiarEstadoGraduado($id, 'aprobarGraduado', 'solicitudAceptada');
     }
 
+    /**
+     * @OA\Delete(
+     *     path="/api/graduados/validar/rechazar/{id}",
+     *     summary="Rechazar un graduado",
+     *     security={{ "bearer_token": {} }},
+     *     tags={"Registro Graduado"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID del graduado a rechazar",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Graduado rechazado",
+     *         @OA\JsonContent(type="object", @OA\Property(property="message", type="string"))
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="No autorizado",
+     *         @OA\JsonContent(type="object", @OA\Property(property="error", type="string"))
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Graduado no encontrado",
+     *         @OA\JsonContent(type="object", @OA\Property(property="error", type="string"))
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Error interno del servidor"
+     *     )
+     * )
+     */
     public function rechazarGraduado($id)
     {
         return $this->cambiarEstadoGraduado($id, 'rechazarGraduado', 'solicitudRechazada');
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/graduados/enumerados",
+     *     summary="Obtener enumerados",
+     *     security={{ "bearer_token": {} }},
+     *     tags={"Registro Graduado"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Listado de enumerados",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="ocupacion_trabajo",
+     *                 type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(property="value", type="string", example="rel_dependencia"),
+     *                     @OA\Property(property="label", type="string", example="Relación de dependencia")
+     *                 )
+     *             ),
+     *             @OA\Property(
+     *                 property="ocupacion_sector",
+     *                 type="array",
+     *                 @OA\Items(type="string", example="Privado")
+     *             ),
+     *             @OA\Property(
+     *                 property="exp_anios",
+     *                 type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(property="value", type="string", example="menos_2"),
+     *                     @OA\Property(property="label", type="string", example="Menos de 2 años")
+     *                 )
+     *             ),
+     *             @OA\Property(
+     *                 property="rrss",
+     *                 type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(property="value", type="string", example="linkedin"),
+     *                     @OA\Property(property="label", type="string", example="LinkedIn")
+     *                 )
+     *             ),
+     *             @OA\Property(
+     *                 property="nivel_formacion",
+     *                 type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(property="value", type="string", example="secundario"),
+     *                     @OA\Property(property="label", type="string", example="Secundario")
+     *                 )
+     *             )
+     *         )
+     *     )
+     * )
+     */
     public function obtenerEnumerados()
     {
         $enumerados = [
