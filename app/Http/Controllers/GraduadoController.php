@@ -304,7 +304,7 @@ class GraduadoController extends Controller
 
         $graduadosList = $this->crearListaGraduadosParaExcel($ciudadesConGraduados);
 
-        return Excel::download(new GraduadosExport($graduadosList), 'graduados.xlsx');
+        return Excel::download(new GraduadosExport($graduadosList), 'graduados.csv');
     }
 
     private function getRequestFilters(Request $request)
@@ -394,7 +394,6 @@ class GraduadoController extends Controller
 
             foreach ($graduados as $graduado) {
                 $graduadoDTO = new GraduadoParaExcelDTO(
-                    $graduado->nombre,
                     $graduado->email
                 );
 

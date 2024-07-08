@@ -3,10 +3,9 @@
 namespace App\Exports;
 
 use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithHeadings;
 use Illuminate\Support\Collection;
 
-class GraduadosExport implements FromCollection, WithHeadings
+class GraduadosExport implements FromCollection
 {
     protected $graduadosList;
 
@@ -18,13 +17,5 @@ class GraduadosExport implements FromCollection, WithHeadings
     public function collection()
     {
         return new Collection($this->graduadosList);
-    }
-
-    public function headings(): array
-    {
-        return [
-            'Nombre',
-            'Contacto',
-        ];
     }
 }
