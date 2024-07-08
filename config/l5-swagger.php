@@ -6,7 +6,7 @@ return [
     'documentations' => [
         'default' => [
             'api' => [
-                'title' => 'L5 Swagger UI',
+                'title' => 'Graduados UNS API',
             ],
 
             'routes' => [
