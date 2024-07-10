@@ -7,6 +7,7 @@ use App\DTO\GraduadoParaRegistroDTO;
 interface IGraduadoRepository
 {
     public function obtenerGraduadosConFiltros(array $filters);
+    public function obtenerGraduado(string $email);
     public function registrarGraduado(GraduadoParaRegistroDTO $graduadoParaRegistroDTO);
     public function obtenerGraduadosPorValidar($cantPagina);
     public function aprobarGraduado($id);

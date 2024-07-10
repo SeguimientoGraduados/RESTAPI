@@ -295,44 +295,6 @@
                 }
             }
         },
-        "/api/ciudades": {
-            "get": {
-                "tags": [
-                    "Mapa"
-                ],
-                "summary": "Obtener todas las ciudades",
-                "operationId": "6509061efd33db86f602f3fa90255b3d",
-                "responses": {
-                    "200": {
-                        "description": "Lista de todas las ciudades",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "properties": {
-                                            "id": {
-                                                "type": "integer"
-                                            },
-                                            "nombre": {
-                                                "type": "string"
-                                            },
-                                            "pais": {
-                                                "type": "string"
-                                            }
-                                        },
-                                        "type": "object"
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Error interno del servidor"
-                    }
-                }
-            }
-        },
         "/api/graduados/filtros": {
             "get": {
                 "tags": [
@@ -776,10 +738,6 @@
         {
             "name": "Autenticación",
             "description": "Autenticación"
-        },
-        {
-            "name": "Mapa",
-            "description": "Mapa"
         },
         {
             "name": "Mapa",

@@ -8,6 +8,7 @@ Route::prefix('/graduados')->group(function () {
     Route::get('/filtros', [GraduadoController::class, 'obtenerValoresParaFiltrar']);
     Route::middleware('auth:sanctum')->group( function () {
         Route::post('/', [GraduadoController::class, 'registrarNuevoGraduado']);
+        Route::get('/perfil', [GraduadoController::class, 'obtenerDatosPersonales']);
         Route::get('/enumerados', [GraduadoController::class, 'obtenerEnumerados']);
     });
     Route::middleware(['auth:sanctum', 'rol:admin'])->group(function () {

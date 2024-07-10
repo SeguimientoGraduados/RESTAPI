@@ -11,8 +11,9 @@ use App\Models\Departamento;
 use App\Models\Formacion;
 use App\Models\Contacto;
 use App\DTO\GraduadoParaMapaDTO;
+use App\DTO\GraduadoParaEditarDTO;
 use App\DTO\CarreraDeGraduadoCompletoDTO;
-use App\DTO\CiudadDeGraduadoParaRegistroDTO;
+use App\DTO\CiudadDTO;
 use App\DTO\GraduadoParaRegistroDTO;
 use App\DTO\GraduadoPorValidarDTO;
 use App\DTO\PaisParaFiltroDTO;
@@ -25,7 +26,6 @@ class GraduadoRepository implements IGraduadoRepository
 {
     public function obtenerGraduadosConFiltros($filters = [])
     {
-        // return $filters;
         $query = Graduado::where('validado', true)->with(['carreras.departamento', 'ciudad.pais']);
 
         if (!empty($filters)) {
@@ -89,7 +89,7 @@ class GraduadoRepository implements IGraduadoRepository
                     $graduado->ocupacion_informacion_adicional,
                     $this->formatearExperiencia($graduado->experiencia_anios),
                     $graduado->habilidades_competencias,
-                    $graduado->formacion ? $graduado->formacion->toArray() : null,
+                    $graduado->formaciones ? $graduado->formaciones->toArray() : null,
                     $graduado->rrss ? $graduado->rrss->toArray() : null,
                     $graduado->cv
                 );
@@ -110,6 +110,40 @@ class GraduadoRepository implements IGraduadoRepository
 
         return $result;
     }
+
+    public function obtenerGraduado(string $email)
+    {
+        $graduado = Graduado::where('contacto', $email)->with(['carreras.departamento', 'ciudad.pais'])->firstOrFail();
+
+        if ($graduado) {
+            return new GraduadoParaEditarDTO(
+                $graduado->nombre,
+                $graduado->dni,
+                $graduado->contacto,
+                $graduado->fecha_nacimiento,
+                $graduado->ciudad->nombre,
+                $graduado->ciudad->latitud,
+                $graduado->ciudad->longitud,
+                $graduado->ciudad->pais->nombre,
+                $this->formatearCarreras($graduado->carreras),
+                $graduado->interes_comunidad,
+                $graduado->interes_oferta,
+                $graduado->interes_demanda,
+                $graduado->ocupacion_trabajo,
+                $graduado->ocupacion_empresa,
+                $graduado->ocupacion_sector,
+                $graduado->ocupacion_informacion_adicional,
+                $graduado->experiencia_anios,
+                $graduado->habilidades_competencias,
+                $graduado->formaciones ? $graduado->formaciones->toArray() : null,
+                $graduado->rrss ? $graduado->rrss->toArray() : null,
+                $graduado->cv,
+            );
+        } else {
+            return ['error' => "Graduado con correo {$email} no encontrado."];
+        }
+    }
+
 
     public function registrarGraduado(GraduadoParaRegistroDTO $graduadoParaRegistroDTO)
     {
@@ -133,7 +167,7 @@ class GraduadoRepository implements IGraduadoRepository
             $graduado->interes_oferta = $graduadoParaRegistroDTO->interes_oferta;
             $graduado->interes_demanda = $graduadoParaRegistroDTO->interes_demanda;
 
-            $ciudadDTO = new CiudadDeGraduadoParaRegistroDTO(
+            $ciudadDTO = new CiudadDTO(
                 $graduadoParaRegistroDTO->ciudad['nombre'],
                 $graduadoParaRegistroDTO->ciudad['latitud'],
                 $graduadoParaRegistroDTO->ciudad['longitud'],
