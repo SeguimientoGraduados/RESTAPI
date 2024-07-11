@@ -235,7 +235,7 @@ class GraduadoRepository implements IGraduadoRepository
         DB::beginTransaction();
 
         try {
-            $graduado = Graduado::where('email',$graduadoParaRegistroDTO->contacto)->firstOrFail();
+            $graduado = Graduado::where('contacto',$graduadoParaRegistroDTO->contacto)->firstOrFail();
             $graduado->nombre = $graduadoParaRegistroDTO->nombre;
             $graduado->dni = $graduadoParaRegistroDTO->dni;
             $graduado->fecha_nacimiento = $graduadoParaRegistroDTO->fecha_nacimiento;

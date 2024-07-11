@@ -12,6 +12,8 @@ use App\Exports\GraduadosExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Validation\Rule;
+use App\Models\Graduado;
 
 class GraduadoController extends Controller
 {
@@ -147,7 +149,9 @@ class GraduadoController extends Controller
 
     public function actualizarDatosGraduado(Request $request)
     {
-        $validado = $this->validateGraduado($request);
+        $graduado = Graduado::where('contacto', $request->input('contacto'))->first();
+
+        $validado = $this->validateGraduado($request, $graduado->id);
 
         $graduadoDTO = $this->createGraduadoDTO($validado);
         $result = $this->graduadoRepository->actualizarGraduado($graduadoDTO);
@@ -158,7 +162,7 @@ class GraduadoController extends Controller
 
         return response()->json(['message' => 'Graduado registrado exitosamente'], 201);
     }
-    
+
     /**
      * @OA\Get(
      *     path="/api/graduados/validar",
@@ -440,12 +444,20 @@ class GraduadoController extends Controller
         return $request->only(['ciudad', 'pais', 'departamento', 'carrera', 'anioDesde', 'anioHasta', 'interes_comunidad', 'interes_oferta', 'interes_demanda']);
     }
 
-    private function validateGraduado(Request $request)
+    private function validateGraduado(Request $request, $graduadoId = null)
     {
         return $request->validate([
             'nombre' => 'required|regex:/^[\pL\s]+$/u|min:3',
-            'contacto' => 'required|email|unique:graduados,contacto',
-            'dni' => 'required|digits_between:6,9|unique:graduados,dni',
+            'contacto' => [
+                'required',
+                'email',
+                Rule::unique('graduados', 'contacto')->ignore($graduadoId)
+            ],
+            'dni' => [
+                'required',
+                'digits_between:6,9',
+                Rule::unique('graduados', 'dni')->ignore($graduadoId)
+            ],
             'fecha_nacimiento' => 'required|date|before:2005-01-01',
             'carreras' => 'required|array',
             'carreras.*.carrera_id' => 'required_with:carreras|integer|exists:carreras,id',
