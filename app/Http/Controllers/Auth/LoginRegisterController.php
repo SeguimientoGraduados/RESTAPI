@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
+use App\Models\Graduado;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
@@ -73,11 +74,17 @@ class LoginRegisterController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password)
+            'password' => Hash::make($request->password),
+            'rol' => User::ROL_USER
         ]);
 
         $data['token'] = $user->createToken($request->email)->plainTextToken;
-        $data['user'] = $user;
+        $data['user'] = [
+            'name' => $user->name,
+            'email' => $user->email,
+            'rol' => $user->rol
+        ];
+        $data['graduado'] = false;
 
         $response = [
             'status' => 'success',
@@ -165,6 +172,7 @@ class LoginRegisterController extends Controller
         }
 
         $user = User::where('email', $request->email)->first();
+        $graduado = Graduado::where('contacto', $request->email)->first();
 
         if (!$user) {
             return response()->json([
@@ -182,6 +190,12 @@ class LoginRegisterController extends Controller
 
         $data['token'] = $user->createToken($request->email)->plainTextToken;
         $data['user'] = $user;
+
+        if (!$graduado){
+            $data['graduado'] = false;
+        }else{
+            $data['graduado'] = true;
+        }
 
         $response = [
             'status' => 'success',
