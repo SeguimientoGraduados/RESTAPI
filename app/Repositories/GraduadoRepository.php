@@ -230,6 +230,92 @@ class GraduadoRepository implements IGraduadoRepository
         }
     }
 
+    public function actualizarGraduado(GraduadoParaRegistroDTO $graduadoParaRegistroDTO)
+    {
+        DB::beginTransaction();
+
+        try {
+            $graduado = Graduado::where('email',$graduadoParaRegistroDTO->contacto)->firstOrFail();
+            $graduado->nombre = $graduadoParaRegistroDTO->nombre;
+            $graduado->dni = $graduadoParaRegistroDTO->dni;
+            $graduado->fecha_nacimiento = $graduadoParaRegistroDTO->fecha_nacimiento;
+            $graduado->contacto = $graduadoParaRegistroDTO->contacto;
+            $graduado->ocupacion_trabajo = $graduadoParaRegistroDTO->ocupacion_trabajo;
+            $graduado->ocupacion_empresa = $graduadoParaRegistroDTO->ocupacion_empresa;
+            $graduado->ocupacion_sector = $graduadoParaRegistroDTO->ocupacion_sector;
+            $graduado->ocupacion_informacion_adicional = $graduadoParaRegistroDTO->ocupacion_informacion_adicional;
+            $graduado->experiencia_anios = $graduadoParaRegistroDTO->experiencia_anios;
+            $graduado->habilidades_competencias = $graduadoParaRegistroDTO->habilidades_competencias;
+            $graduado->cv = $graduadoParaRegistroDTO->cv;
+            $graduado->interes_comunidad = $graduadoParaRegistroDTO->interes_comunidad;
+            $graduado->interes_oferta = $graduadoParaRegistroDTO->interes_oferta;
+            $graduado->interes_demanda = $graduadoParaRegistroDTO->interes_demanda;
+
+            $ciudadDTO = new CiudadDTO(
+                $graduadoParaRegistroDTO->ciudad['nombre'],
+                $graduadoParaRegistroDTO->ciudad['latitud'],
+                $graduadoParaRegistroDTO->ciudad['longitud'],
+                $graduadoParaRegistroDTO->ciudad['pais'],
+            );
+
+            $ciudad = Ciudad::where('nombre', $ciudadDTO->nombre)->first();
+            if (!$ciudad) {
+                $pais = Pais::firstOrCreate(['nombre' => $ciudadDTO->pais]);
+                $ciudad = Ciudad::create([
+                    'nombre' => $ciudadDTO->nombre,
+                    'latitud' => $ciudadDTO->latitud,
+                    'longitud' => $ciudadDTO->longitud,
+                    'pais_id' => $pais->id
+                ]);
+            }
+
+            $graduado->ciudad()->associate($ciudad);
+
+            $graduado->save();
+
+            if ($graduadoParaRegistroDTO->carreras) {
+                $graduado->carreras()->detach();
+                foreach ($graduadoParaRegistroDTO->carreras as $carreraData) {
+                    $carrera = Carrera::find($carreraData['carrera_id']);
+                    if (!$carrera) {
+                        DB::rollBack();
+                        return ['error' => "Carrera con ID {$carreraData['carrera_id']} no encontrada"];
+                    }
+                    $graduado->carreras()->attach($carrera->id, ['anio_graduacion' => $carreraData['anio_graduacion']]);
+                }
+            }
+
+            if ($graduadoParaRegistroDTO->formacion) {
+                $graduado->formaciones()->delete();
+                foreach ($graduadoParaRegistroDTO->formacion as $formacionData) {
+                    $graduado->formaciones()->create([
+                        'titulo' => $formacionData['titulo'],
+                        'institucion' => $formacionData['institucion'],
+                        'nivel' => $formacionData['nivel'],
+                    ]);
+                }
+            }
+
+            if ($graduadoParaRegistroDTO->rrss) {
+                $graduado->rrss()->delete();
+                foreach ($graduadoParaRegistroDTO->rrss as $rrssData) {
+                    $graduado->rrss()->create([
+                        'rrss' => $rrssData['rrss'],
+                        'url' => $rrssData['url'],
+                    ]);
+                }
+            }
+
+            DB::commit();
+            return ['success' => true];
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return [
+                'error' => 'Hubo un error al actualizar el graduado: ' . $e->getMessage()
+            ];
+        }
+    }
+
     public function obtenerGraduadosPorValidar($cantPagina = 10)
     {
         $graduados = Graduado::where('validado', 'false')->with(['carreras.departamento'])->paginate($cantPagina);

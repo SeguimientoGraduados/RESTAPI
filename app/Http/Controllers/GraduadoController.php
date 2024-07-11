@@ -145,6 +145,20 @@ class GraduadoController extends Controller
         return response()->json(['message' => 'Graduado registrado exitosamente'], 201);
     }
 
+    public function actualizarDatosGraduado(Request $request)
+    {
+        $validado = $this->validateGraduado($request);
+
+        $graduadoDTO = $this->createGraduadoDTO($validado);
+        $result = $this->graduadoRepository->actualizarGraduado($graduadoDTO);
+
+        if (isset($result['error'])) {
+            return response()->json(['error' => $result['error']], 400);
+        }
+
+        return response()->json(['message' => 'Graduado registrado exitosamente'], 201);
+    }
+    
     /**
      * @OA\Get(
      *     path="/api/graduados/validar",
