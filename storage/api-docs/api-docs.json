@@ -260,7 +260,7 @@
         "/api/carreras": {
             "get": {
                 "tags": [
-                    "Mapa"
+                    "Filtros"
                 ],
                 "summary": "Obtener todas las carreras",
                 "operationId": "387798d3e9b53b92523846e67051c8f7",
@@ -298,7 +298,7 @@
         "/api/graduados/filtros": {
             "get": {
                 "tags": [
-                    "Mapa"
+                    "Filtros"
                 ],
                 "summary": "Obtener graduados con filtros",
                 "operationId": "b03606500c5e0a2ffab3c5bcbf1022ce",
@@ -331,6 +331,69 @@
                         "description": "Error interno del servidor"
                     }
                 }
+            }
+        },
+        "/api/graduados/perfil": {
+            "get": {
+                "tags": [
+                    "Registro Graduado"
+                ],
+                "summary": "Obtener datos personales del graduado autenticado",
+                "operationId": "547865de835bb6aa6e4148370b0722cd",
+                "responses": {
+                    "200": {
+                        "description": "Datos personales del graduado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "nombre": {
+                                            "type": "string",
+                                            "example": "John Doe"
+                                        },
+                                        "email": {
+                                            "type": "string",
+                                            "example": "johndoe@example.com"
+                                        },
+                                        "carrera": {
+                                            "type": "string",
+                                            "example": "Ingeniería en Sistemas"
+                                        },
+                                        "anio_graduacion": {
+                                            "type": "integer",
+                                            "example": 2020
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Graduado no registrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Graduado no registrado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
             }
         },
         "/api/graduados": {
@@ -658,11 +721,11 @@
                                                 "properties": {
                                                     "value": {
                                                         "type": "string",
-                                                        "example": "menos_2"
+                                                        "example": "menos_5"
                                                     },
                                                     "label": {
                                                         "type": "string",
-                                                        "example": "Menos de 2 años"
+                                                        "example": "Menos de 5 años"
                                                     }
                                                 },
                                                 "type": "object"
@@ -713,6 +776,95 @@
                     }
                 ]
             }
+        },
+        "/api/graduados/exportar-excel": {
+            "get": {
+                "tags": [
+                    "Registro Graduado"
+                ],
+                "summary": "Exportar graduados filtrados a Excel",
+                "operationId": "fe785c474e0bd4c38dabf4a39659658e",
+                "parameters": [
+                    {
+                        "name": "pais",
+                        "in": "query",
+                        "description": "ID del país para filtrar",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "ciudad",
+                        "in": "query",
+                        "description": "ID de la ciudad para filtrar",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "departamento",
+                        "in": "query",
+                        "description": "ID del departamento para filtrar",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "carrera",
+                        "in": "query",
+                        "description": "ID de la carrera para filtrar",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "anioDesde",
+                        "in": "query",
+                        "description": "Año desde el cual filtrar",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "anioHasta",
+                        "in": "query",
+                        "description": "Año hasta el cual filtrar",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Archivo CSV de graduados filtrados",
+                        "content": {
+                            "text/csv": {
+                                "schema": {
+                                    "type": "string",
+                                    "format": "binary"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Solicitud incorrecta"
+                    },
+                    "500": {
+                        "description": "Error interno del servidor"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
         }
     },
     "components": {
@@ -740,12 +892,20 @@
             "description": "Autenticación"
         },
         {
-            "name": "Mapa",
-            "description": "Mapa"
+            "name": "Filtros",
+            "description": "Filtros"
         },
         {
-            "name": "Mapa",
-            "description": "Mapa"
+            "name": "Filtros",
+            "description": "Filtros"
+        },
+        {
+            "name": "Registro Graduado",
+            "description": "Registro Graduado"
+        },
+        {
+            "name": "Registro Graduado",
+            "description": "Registro Graduado"
         },
         {
             "name": "Registro Graduado",

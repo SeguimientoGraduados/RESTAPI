@@ -11,6 +11,7 @@ use App\Mail\SolicitudesCorreo;
 use App\Exports\GraduadosExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class GraduadoController extends Controller
 {
@@ -25,7 +26,7 @@ class GraduadoController extends Controller
      * @OA\Get(
      *     path="/api/graduados/filtros",
      *     summary="Obtener graduados con filtros",
-     *     tags={"Mapa"},
+     *     tags={"Filtros"},
      *     @OA\Parameter(
      *         name="filtro",
      *         in="query",
@@ -51,13 +52,48 @@ class GraduadoController extends Controller
         return response()->json($graduados);
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/graduados/perfil",
+     *     summary="Obtener datos personales del graduado autenticado",
+     *     tags={"Registro Graduado"},
+     *     security={{"bearer_token":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Datos personales del graduado",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="nombre", type="string", example="John Doe"),
+     *             @OA\Property(property="email", type="string", example="johndoe@example.com"),
+     *             @OA\Property(property="carrera", type="string", example="Ingeniería en Sistemas"),
+     *             @OA\Property(property="anio_graduacion", type="integer", example=2020),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Graduado no registrado",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="Graduado no registrado")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Error interno del servidor"
+     *     )
+     * )
+     */
     public function obtenerDatosPersonales(Request $request)
     {
         $usuario = Auth::user();
         if ($usuario) {
-            $datos = $this->graduadoRepository->obtenerGraduado($usuario->email);
-            return response()->json($datos);
-        }else {
+            try {
+                $datos = $this->graduadoRepository->obtenerGraduado($usuario->email);
+                return response()->json($datos);
+            } catch (ModelNotFoundException $e) {
+                return response()->json(['message' => 'Graduado no encontrado'], 404);
+            }
+        } else {
             return response()->json(['message' => 'Graduado no registrado'], 400);
         }
     }
@@ -246,8 +282,8 @@ class GraduadoController extends Controller
      *                 type="array",
      *                 @OA\Items(
      *                     type="object",
-     *                     @OA\Property(property="value", type="string", example="menos_2"),
-     *                     @OA\Property(property="label", type="string", example="Menos de 2 años")
+     *                     @OA\Property(property="value", type="string", example="menos_5"),
+     *                     @OA\Property(property="label", type="string", example="Menos de 5 años")
      *                 )
      *             ),
      *             @OA\Property(
@@ -309,6 +345,72 @@ class GraduadoController extends Controller
         return response()->json($valores);
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/graduados/exportar-excel",
+     *     summary="Exportar graduados filtrados a Excel",
+     *     security={{ "bearer_token": {} }},
+     *     tags={"Registro Graduado"},
+     *     @OA\Parameter(
+     *         name="pais",
+     *         in="query",
+     *         description="ID del país para filtrar",
+     *         required=false,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Parameter(
+     *         name="ciudad",
+     *         in="query",
+     *         description="ID de la ciudad para filtrar",
+     *         required=false,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Parameter(
+     *         name="departamento",
+     *         in="query",
+     *         description="ID del departamento para filtrar",
+     *         required=false,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Parameter(
+     *         name="carrera",
+     *         in="query",
+     *         description="ID de la carrera para filtrar",
+     *         required=false,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Parameter(
+     *         name="anioDesde",
+     *         in="query",
+     *         description="Año desde el cual filtrar",
+     *         required=false,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Parameter(
+     *         name="anioHasta",
+     *         in="query",
+     *         description="Año hasta el cual filtrar",
+     *         required=false,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Archivo CSV de graduados filtrados",
+     *         @OA\MediaType(
+     *             mediaType="text/csv",
+     *             @OA\Schema(type="string", format="binary")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Solicitud incorrecta"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Error interno del servidor"
+     *     )
+     * )
+     */
     public function obtenerGraduadosPorFiltroExportarExcel(Request $request)
     {
         $filters = $this->getRequestFilters($request);
