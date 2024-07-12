@@ -67,10 +67,10 @@ class GraduadoController extends Controller
             ],
             'ocupacion_sector' => ['Privado', 'Público'],
             'exp_anios' => [
-                ['value' => 'menos_2', 'label' => 'Menos de 2 años'],
-                ['value' => 'de_2_a_5', 'label' => 'De 2 a 5 años'],
+                ['value' => 'menos_5', 'label' => 'Menos de 5 años'],
                 ['value' => 'de_5_a_10', 'label' => 'De 5 a 10 años'],
-                ['value' => 'mas_10', 'label' => 'Más de 10 años']
+                ['value' => 'de_10_a_20', 'label' => 'De 10 a 20 años'],
+                ['value' => 'mas_20', 'label' => 'Más de 20 años']
             ],
             'rrss' => [
                 ['value' => 'linkedin', 'label' => 'LinkedIn'],
