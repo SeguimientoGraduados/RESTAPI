@@ -6,6 +6,7 @@ class GraduadoParaMapaDTO
 {
     public int $id;
     public string $nombre;
+    public string $apellido;
     public array $carreras;
     public string $email;
     public ?string $ocupacion_trabajo;
@@ -23,6 +24,7 @@ class GraduadoParaMapaDTO
     public function __construct(
         int $id,
         string $nombre,
+        string $apellido,
         array $carreras,
         string $email,
         ?string $ocupacion_trabajo = null,
@@ -37,6 +39,7 @@ class GraduadoParaMapaDTO
     ) {
         $this->id = $id;
         $this->nombre = $nombre;
+        $this->apellido = $apellido;
         $this->carreras = $carreras;
         $this->email = $email;
         $this->ocupacion_trabajo = $ocupacion_trabajo;

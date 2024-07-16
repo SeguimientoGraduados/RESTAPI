@@ -448,6 +448,7 @@ class GraduadoController extends Controller
     {
         return $request->validate([
             'nombre' => 'required|regex:/^[\pL\s]+$/u|min:3',
+            'apellido' => 'required|regex:/^[\pL\s]+$/u|min:3',
             'contacto' => [
                 'required',
                 'email',
@@ -491,6 +492,7 @@ class GraduadoController extends Controller
     {
         return new GraduadoParaRegistroDTO(
             $validado['nombre'],
+            $validado['apellido'],
             $validado['dni'],
             $validado['fecha_nacimiento'],
             $validado['ciudad'],

@@ -5,6 +5,7 @@ namespace App\DTO;
 class GraduadoParaRegistroDTO
 {
     public string $nombre;
+    public string $apellido;
     public string $dni;
     public string $fecha_nacimiento;
     public array $ciudad;
@@ -25,6 +26,7 @@ class GraduadoParaRegistroDTO
 
     public function __construct(
         string $nombre,
+        string $apellido,
         string $dni,
         string $fecha_nacimiento,
         array $ciudad,
@@ -44,6 +46,7 @@ class GraduadoParaRegistroDTO
         ?string $cv = null,
     ) {
         $this->nombre = $nombre;
+        $this->apellido = $apellido;
         $this->dni = $dni;
         $this->fecha_nacimiento = $fecha_nacimiento;
         $this->ciudad = $ciudad;

@@ -81,6 +81,7 @@ class GraduadoRepository implements IGraduadoRepository
                 return new GraduadoParaMapaDTO(
                     $graduado->id,
                     $graduado->nombre,
+                    $graduado->apellido,
                     $this->formatearCarreras($graduado->carreras),
                     $graduado->contacto,
                     $graduado->ocupacion_trabajo,
@@ -118,6 +119,7 @@ class GraduadoRepository implements IGraduadoRepository
         if ($graduado) {
             return new GraduadoParaEditarDTO(
                 $graduado->nombre,
+                $graduado->apellido,
                 $graduado->dni,
                 $graduado->contacto,
                 $graduado->fecha_nacimiento,
@@ -153,6 +155,7 @@ class GraduadoRepository implements IGraduadoRepository
 
             $graduado = new Graduado();
             $graduado->nombre = $graduadoParaRegistroDTO->nombre;
+            $graduado->apellido = $graduadoParaRegistroDTO->apellido;
             $graduado->dni = $graduadoParaRegistroDTO->dni;
             $graduado->fecha_nacimiento = $graduadoParaRegistroDTO->fecha_nacimiento;
             $graduado->contacto = $graduadoParaRegistroDTO->contacto;
@@ -237,6 +240,7 @@ class GraduadoRepository implements IGraduadoRepository
         try {
             $graduado = Graduado::where('contacto',$graduadoParaRegistroDTO->contacto)->firstOrFail();
             $graduado->nombre = $graduadoParaRegistroDTO->nombre;
+            $graduado->apellido = $graduadoParaRegistroDTO->apellido;
             $graduado->dni = $graduadoParaRegistroDTO->dni;
             $graduado->fecha_nacimiento = $graduadoParaRegistroDTO->fecha_nacimiento;
             $graduado->contacto = $graduadoParaRegistroDTO->contacto;
@@ -324,6 +328,7 @@ class GraduadoRepository implements IGraduadoRepository
             return new GraduadoPorValidarDTO(
                 $graduado->id,
                 $graduado->nombre,
+                $graduado->apellido,
                 $graduado->dni,
                 $graduado->fecha_nacimiento,
                 $this->formatearCarreras($graduado->carreras),

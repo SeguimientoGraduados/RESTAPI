@@ -6,6 +6,7 @@ class GraduadoPorValidarDTO
 {
     public $id;
     public string $nombre;
+    public string $apellido;
     public string $dni;
     public string $fecha_nacimiento;
     public ?array $carreras;
@@ -21,6 +22,7 @@ class GraduadoPorValidarDTO
     public function __construct(
         int $id,
         string $nombre,
+        string $apellido,
         string $dni,
         string $fecha_nacimiento,
         array $carreras,
@@ -36,6 +38,7 @@ class GraduadoPorValidarDTO
     ) {
         $this->id = $id;
         $this->nombre = $nombre;
+        $this->apellido = $apellido;
         $this->dni = $dni;
         $this->fecha_nacimiento = $fecha_nacimiento;
         $this->carreras = $carreras;

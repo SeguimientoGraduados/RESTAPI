@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('graduados', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
+            $table->string('apellido');
             $table->string('dni')->unique();
             $table->date('fecha_nacimiento');
             $table->unsignedBigInteger('ciudad_id');
