@@ -135,6 +135,7 @@ class GraduadoController extends Controller
      */
     public function registrarNuevoGraduado(Request $request)
     {
+
         $validado = $this->validateGraduado($request);
 
         $graduadoDTO = $this->createGraduadoDTO($validado);
@@ -160,7 +161,7 @@ class GraduadoController extends Controller
             return response()->json(['error' => $result['error']], 400);
         }
 
-        return response()->json(['message' => 'Graduado registrado exitosamente'], 201);
+        return response()->json(['message' => 'Graduado actualizado exitosamente'], 201);
     }
 
     /**
@@ -485,6 +486,9 @@ class GraduadoController extends Controller
             'interes_comunidad' => 'required|boolean',
             'interes_oferta' => 'required|boolean',
             'interes_demanda' => 'required|boolean',
+            'visibilidad_contacto' => 'required|boolean',
+            'visibilidad_laboral' => 'required|boolean',
+            'visibilidad_formacion' => 'required|boolean',
         ]);
     }
 
@@ -510,6 +514,9 @@ class GraduadoController extends Controller
             $validado['formacion'] ?? [],
             $validado['rrss'] ?? [],
             $validado['cv'] ?? null,
+            $validado['visibilidad_contacto'] ?? null,
+            $validado['visibilidad_laboral'] ?? null,
+            $validado['visibilidad_formacion'] ?? null,
         );
     }
 

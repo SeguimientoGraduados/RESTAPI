@@ -23,6 +23,9 @@ class GraduadoParaEditarDTO
     public bool $interes_comunidad;
     public bool $interes_oferta;
     public bool $interes_demanda;
+    public bool $visibilidad_contacto;
+    public bool $visibilidad_laboral;
+    public bool $visibilidad_formacion;
 
     public function __construct(
         string $nombre,
@@ -47,6 +50,9 @@ class GraduadoParaEditarDTO
         ?array $formacion = null,
         ?array $rrss = null,
         ?string $cv = null,
+        bool $visibilidad_contacto,
+        bool $visibilidad_laboral,
+        bool $visibilidad_formacion,
     ) {
         $this->nombre = $nombre;
         $this->apellido = $apellido;
@@ -67,5 +73,11 @@ class GraduadoParaEditarDTO
         $this->interes_comunidad = $interes_comunidad;
         $this->interes_oferta = $interes_oferta;
         $this->interes_demanda = $interes_demanda;
+        $this->interes_comunidad = $interes_comunidad;
+        $this->interes_oferta = $interes_oferta;
+        $this->interes_demanda = $interes_demanda;
+        $this->visibilidad_contacto = $visibilidad_contacto;
+        $this->visibilidad_laboral = $visibilidad_laboral;
+        $this->visibilidad_formacion = $visibilidad_formacion;
     }
 }

@@ -140,6 +140,9 @@ class GraduadoRepository implements IGraduadoRepository
                 $graduado->formaciones ? $graduado->formaciones->toArray() : null,
                 $graduado->rrss ? $graduado->rrss->toArray() : null,
                 $graduado->cv,
+                $graduado->visibilidad_contacto,
+                $graduado->visibilidad_laboral,
+                $graduado->visibilidad_formacion
             );
         } else {
             return ['error' => "Graduado con correo {$email} no encontrado."];
@@ -169,6 +172,9 @@ class GraduadoRepository implements IGraduadoRepository
             $graduado->interes_comunidad = $graduadoParaRegistroDTO->interes_comunidad;
             $graduado->interes_oferta = $graduadoParaRegistroDTO->interes_oferta;
             $graduado->interes_demanda = $graduadoParaRegistroDTO->interes_demanda;
+            $graduado->visibilidad_contacto = $graduadoParaRegistroDTO->visibilidad_contacto;
+            $graduado->visibilidad_laboral = $graduadoParaRegistroDTO->visibilidad_laboral;
+            $graduado->visibilidad_formacion = $graduadoParaRegistroDTO->visibilidad_formacion;
 
             $ciudadDTO = new CiudadDTO(
                 $graduadoParaRegistroDTO->ciudad['nombre'],
@@ -238,7 +244,7 @@ class GraduadoRepository implements IGraduadoRepository
         DB::beginTransaction();
 
         try {
-            $graduado = Graduado::where('contacto',$graduadoParaRegistroDTO->contacto)->firstOrFail();
+            $graduado = Graduado::where('contacto', $graduadoParaRegistroDTO->contacto)->firstOrFail();
             $graduado->nombre = $graduadoParaRegistroDTO->nombre;
             $graduado->apellido = $graduadoParaRegistroDTO->apellido;
             $graduado->dni = $graduadoParaRegistroDTO->dni;
@@ -254,6 +260,9 @@ class GraduadoRepository implements IGraduadoRepository
             $graduado->interes_comunidad = $graduadoParaRegistroDTO->interes_comunidad;
             $graduado->interes_oferta = $graduadoParaRegistroDTO->interes_oferta;
             $graduado->interes_demanda = $graduadoParaRegistroDTO->interes_demanda;
+            $graduado->visibilidad_contacto = $graduadoParaRegistroDTO->visibilidad_contacto;
+            $graduado->visibilidad_laboral = $graduadoParaRegistroDTO->visibilidad_laboral;
+            $graduado->visibilidad_formacion = $graduadoParaRegistroDTO->visibilidad_formacion;
 
             $ciudadDTO = new CiudadDTO(
                 $graduadoParaRegistroDTO->ciudad['nombre'],
@@ -341,6 +350,9 @@ class GraduadoRepository implements IGraduadoRepository
                 $graduado->ocupacion_informacion_adicional,
                 $this->formatearExperiencia($graduado->experiencia_anios),
                 $graduado->habilidades_competencias,
+                $graduado->visibilidad_contacto,
+                $graduado->visibilidad_laboral,
+                $graduado->visibilidad_formacion
             );
         });
 
