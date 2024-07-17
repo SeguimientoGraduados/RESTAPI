@@ -28,7 +28,10 @@ class GraduadosSeeder extends Seeder
                 'interes_comunidad' => true,
                 'interes_oferta' => true,
                 'interes_demanda' => false,
-                'validado' => true
+                'validado' => true,
+                'visibilidad_contacto' => true,
+                'visibilidad_laboral' => true,
+                'visibilidad_formacion' => false
             ],
             [
                 'nombre' => 'Javier',
@@ -47,7 +50,10 @@ class GraduadosSeeder extends Seeder
                 'interes_comunidad' => false,
                 'interes_oferta' => true,
                 'interes_demanda' => true,
-                'validado' => true
+                'validado' => true,
+                'visibilidad_contacto' => false,
+                'visibilidad_laboral' => true,
+                'visibilidad_formacion' => false
             ],
             [
                 'nombre' => 'Carla',
@@ -66,7 +72,10 @@ class GraduadosSeeder extends Seeder
                 'interes_comunidad' => true,
                 'interes_oferta' => false,
                 'interes_demanda' => true,
-                'validado' => true
+                'validado' => true,
+                'visibilidad_contacto' => true,
+                'visibilidad_laboral' => false,
+                'visibilidad_formacion' => false
             ],
             [
                 'nombre' => 'Diego',
@@ -85,7 +94,10 @@ class GraduadosSeeder extends Seeder
                 'interes_comunidad' => false,
                 'interes_oferta' => true,
                 'interes_demanda' => true,
-                'validado' => true
+                'validado' => true,
+                'visibilidad_contacto' => false,
+                'visibilidad_laboral' => false,
+                'visibilidad_formacion' => false
             ],
             [
                 'nombre' => 'Elena',
@@ -104,7 +116,10 @@ class GraduadosSeeder extends Seeder
                 'interes_comunidad' => true,
                 'interes_oferta' => false,
                 'interes_demanda' => true,
-                'validado' => true
+                'validado' => true,
+                'visibilidad_contacto' => true,
+                'visibilidad_laboral' => false,
+                'visibilidad_formacion' => true
             ],
             [
                 'nombre' => 'Federico',
@@ -123,7 +138,10 @@ class GraduadosSeeder extends Seeder
                 'interes_comunidad' => false,
                 'interes_oferta' => true,
                 'interes_demanda' => true,
-                'validado' => true
+                'validado' => true,
+                'visibilidad_contacto' => true,
+                'visibilidad_laboral' => true,
+                'visibilidad_formacion' => true
             ],
             [
                 'nombre' => 'Gabriela',
@@ -142,7 +160,10 @@ class GraduadosSeeder extends Seeder
                 'interes_comunidad' => true,
                 'interes_oferta' => false,
                 'interes_demanda' => true,
-                'validado' => true
+                'validado' => true,
+                'visibilidad_contacto' => false,
+                'visibilidad_laboral' => true,
+                'visibilidad_formacion' => true
             ],
             [
                 'nombre' => 'Héctor',
@@ -161,7 +182,10 @@ class GraduadosSeeder extends Seeder
                 'interes_comunidad' => false,
                 'interes_oferta' => true,
                 'interes_demanda' => true,
-                'validado' => true
+                'validado' => true,
+                'visibilidad_contacto' => false,
+                'visibilidad_laboral' => false,
+                'visibilidad_formacion' => true
             ],
             [
                 'nombre' => 'Inés',
@@ -180,7 +204,10 @@ class GraduadosSeeder extends Seeder
                 'interes_comunidad' => true,
                 'interes_oferta' => false,
                 'interes_demanda' => true,
-                'validado' => true
+                'validado' => true,
+                'visibilidad_contacto' => true,
+                'visibilidad_laboral' => true,
+                'visibilidad_formacion' => false
             ],
             [
                 'nombre' => 'Juan',
@@ -199,7 +226,10 @@ class GraduadosSeeder extends Seeder
                 'interes_comunidad' => false,
                 'interes_oferta' => true,
                 'interes_demanda' => true,
-                'validado' => true
+                'validado' => true,
+                'visibilidad_contacto' => true,
+                'visibilidad_laboral' => false,
+                'visibilidad_formacion' => true
             ],
             [
                 'nombre' => 'Gonzalo',
@@ -218,7 +248,10 @@ class GraduadosSeeder extends Seeder
                 'interes_comunidad' => true,
                 'interes_oferta' => false,
                 'interes_demanda' => true,
-                'validado' => false
+                'validado' => false,
+                'visibilidad_contacto' => true,
+                'visibilidad_laboral' => true,
+                'visibilidad_formacion' => false
             ],
             [
                 'nombre' => 'Dylan Hughes',
@@ -237,7 +270,10 @@ class GraduadosSeeder extends Seeder
                 'interes_comunidad' => true,
                 'interes_oferta' => true,
                 'interes_demanda' => false,
-                'validado' => false
+                'validado' => false,
+                'visibilidad_contacto' => true,
+                'visibilidad_laboral' => true,
+                'visibilidad_formacion' => true
             ]
         ];
 
