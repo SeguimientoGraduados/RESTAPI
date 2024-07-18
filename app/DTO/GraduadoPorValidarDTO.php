@@ -16,12 +16,7 @@ class GraduadoPorValidarDTO
     public ?string $ocupacion_informacion_adicional;
     public ?string $experiencia_anios;
     public ?string $habilidades_competencias;
-    public bool $interes_comunidad;
-    public bool $interes_oferta;
-    public bool $interes_demanda;
-    public bool $visibilidad_contacto;
-    public bool $visibilidad_laboral;
-    public bool $visibilidad_formacion;
+    public ?string $cv;
     public function __construct(
         int $id,
         string $nombre,
@@ -29,15 +24,13 @@ class GraduadoPorValidarDTO
         string $dni,
         string $fecha_nacimiento,
         array $carreras,
-        bool $interes_comunidad,
-        bool $interes_oferta,
-        bool $interes_demanda,
         ?string $ocupacion_trabajo = null,
         ?string $ocupacion_empresa = null,
         ?string $ocupacion_sector = null,
         ?string $ocupacion_informacion_adicional = null,
         ?string $experiencia_anios = null,
         ?string $habilidades_competencias = null,
+        ?string $cv = null       
     ) {
         $this->id = $id;
         $this->nombre = $nombre;
@@ -51,8 +44,6 @@ class GraduadoPorValidarDTO
         $this->ocupacion_informacion_adicional = $ocupacion_informacion_adicional;
         $this->experiencia_anios = $experiencia_anios;
         $this->habilidades_competencias = $habilidades_competencias;
-        $this->interes_comunidad = $interes_comunidad;
-        $this->interes_oferta = $interes_oferta;
-        $this->interes_demanda = $interes_demanda;
+        $this->cv = $cv;
     }
 }
