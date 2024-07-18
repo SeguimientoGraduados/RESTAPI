@@ -343,15 +343,13 @@ class GraduadoRepository implements IGraduadoRepository
                 $graduado->dni,
                 $graduado->fecha_nacimiento,
                 $this->formatearCarreras($graduado->carreras),
-                $graduado->interes_comunidad,
-                $graduado->interes_oferta,
-                $graduado->interes_demanda,
                 $this->formatearTrabajo($graduado->ocupacion_trabajo),
                 $graduado->ocupacion_empresa,
                 $this->formatearSectorTrabajo($graduado->ocupacion_sector),
                 $graduado->ocupacion_informacion_adicional,
                 $this->formatearExperiencia($graduado->experiencia_anios),
                 $graduado->habilidades_competencias,
+                $graduado->cv
             );
         });
 
