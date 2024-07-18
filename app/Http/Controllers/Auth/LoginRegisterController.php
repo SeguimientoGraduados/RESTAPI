@@ -7,6 +7,8 @@ use App\Models\Graduado;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Auth;
 use Validator;
 
 class LoginRegisterController extends Controller
@@ -69,6 +71,12 @@ class LoginRegisterController extends Controller
                 'message' => 'Validation Error!',
                 'data' => $validate->errors(),
             ], 403);
+        }
+
+        $captchaValid = $this->validateRecaptcha($request->captchaToken);
+
+        if (!$captchaValid) {
+            return response()->json(['message' => 'Invalid CAPTCHA'], 400);
         }
 
         $user = User::create([
@@ -160,7 +168,8 @@ class LoginRegisterController extends Controller
     {
         $validate = Validator::make($request->all(), [
             'email' => 'required|string|email',
-            'password' => 'required|string'
+            'password' => 'required|string',
+            'captchaToken' => 'required'
         ]);
 
         if ($validate->fails()) {
@@ -169,6 +178,12 @@ class LoginRegisterController extends Controller
                 'message' => 'Validation Error!',
                 'data' => $validate->errors(),
             ], 403);
+        }
+        
+        $captchaValid = $this->validateRecaptcha($request->captchaToken);
+
+        if (!$captchaValid) {
+            return response()->json(['message' => 'Invalid CAPTCHA'], 400);
         }
 
         $user = User::where('email', $request->email)->first();
@@ -188,17 +203,17 @@ class LoginRegisterController extends Controller
             ], 401);
         }
 
-        if ($user->rol == User::ROL_ADMIN){
+        if ($user->rol == User::ROL_ADMIN) {
             $data['token'] = $user->createToken($request->email, ['admin'])->plainTextToken;
-        }else{
+        } else {
             $data['token'] = $user->createToken($request->email)->plainTextToken;
         }
-        
+
         $data['user'] = $user;
 
-        if (!$graduado){
+        if (!$graduado) {
             $data['graduado'] = false;
-        }else{
+        } else {
             $data['graduado'] = true;
         }
 
@@ -209,6 +224,17 @@ class LoginRegisterController extends Controller
         ];
 
         return response()->json($response, 200);
+    }
+
+    public function validateRecaptcha($token)
+    {
+
+        $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+            'secret' => env('APP_PUBLIC_SECRET_KEY'),
+            'response' => $token
+        ]);
+
+        return $response->json()['success'];
     }
 
     /**
