@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\Rule;
 use App\Models\Graduado;
+use App\Models\User;
 
 class GraduadoController extends Controller
 {
@@ -50,7 +51,16 @@ class GraduadoController extends Controller
     public function obtenerGraduadosConFiltros(Request $request)
     {
         $filters = $this->getRequestFilters($request);
-        $graduados = $this->graduadoRepository->obtenerGraduadosConFiltros($filters);
+        
+        $isAdmin = false;
+        
+        $user = $request->user();
+        
+        if ($user && $user->rol == User::ROL_ADMIN) {
+            $isAdmin = true;
+        }
+
+        $graduados = $this->graduadoRepository->obtenerGraduadosConFiltros($filters, $isAdmin);
         return response()->json($graduados);
     }
 

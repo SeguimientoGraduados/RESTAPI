@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\DB;
 
 class GraduadoRepository implements IGraduadoRepository
 {
-    public function obtenerGraduadosConFiltros($filters = [])
+    public function obtenerGraduadosConFiltros($filters = [], $isAdmin = false)
     {
         $query = Graduado::where('validado', true)->with(['carreras.departamento', 'ciudad.pais']);
 
@@ -77,21 +77,23 @@ class GraduadoRepository implements IGraduadoRepository
 
         foreach ($graduadosPorCiudad as $ciudadId => $graduados) {
             $ciudad = $graduados->first()->ciudad;
-            $graduadoDTOs = $graduados->map(function ($graduado) {
+            $graduadoDTOs = $graduados->map(function ($graduado) use ($isAdmin) {
                 return new GraduadoParaMapaDTO(
                     $graduado->id,
                     $graduado->nombre,
                     $graduado->apellido,
+                    $isAdmin ? $graduado->dni : '',
+                    $isAdmin ? $graduado->fecha_nacimiento : '',
                     $this->formatearCarreras($graduado->carreras),
-                    $graduado->contacto,
-                    $graduado->ocupacion_trabajo,
-                    $graduado->ocupacion_empresa,
-                    $graduado->ocupacion_sector,
-                    $graduado->ocupacion_informacion_adicional,
-                    $this->formatearExperiencia($graduado->experiencia_anios),
-                    $graduado->habilidades_competencias,
-                    $graduado->formaciones ? $graduado->formaciones->toArray() : null,
-                    $graduado->rrss ? $graduado->rrss->toArray() : null,
+                    $isAdmin || $graduado->visibilidad_contacto ? $graduado->contacto : '',
+                    $isAdmin || $graduado->visibilidad_laboral ? $graduado->ocupacion_trabajo : null,
+                    $isAdmin || $graduado->visibilidad_laboral ? $graduado->ocupacion_empresa : null,
+                    $isAdmin || $graduado->visibilidad_laboral ? $graduado->ocupacion_sector : null,
+                    $isAdmin || $graduado->visibilidad_laboral ? $graduado->ocupacion_informacion_adicional : null,
+                    $isAdmin || $graduado->visibilidad_laboral ? $this->formatearExperiencia($graduado->experiencia_anios): '',
+                    $isAdmin || $graduado->visibilidad_laboral ? $graduado->habilidades_competencias : null,
+                    $isAdmin || $graduado->visibilidad_formacion ? ($graduado->formaciones ? $graduado->formaciones->toArray() : null) : [],
+                    $isAdmin || $graduado->visibilidad_contacto ? ($graduado->rrss ? $graduado->rrss->toArray() : null) : [],
                     $graduado->cv
                 );
             })->toArray();
@@ -350,9 +352,6 @@ class GraduadoRepository implements IGraduadoRepository
                 $graduado->ocupacion_informacion_adicional,
                 $this->formatearExperiencia($graduado->experiencia_anios),
                 $graduado->habilidades_competencias,
-                $graduado->visibilidad_contacto,
-                $graduado->visibilidad_laboral,
-                $graduado->visibilidad_formacion
             );
         });
 

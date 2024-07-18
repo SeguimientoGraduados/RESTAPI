@@ -188,7 +188,12 @@ class LoginRegisterController extends Controller
             ], 401);
         }
 
-        $data['token'] = $user->createToken($request->email)->plainTextToken;
+        if ($user->rol == User::ROL_ADMIN){
+            $data['token'] = $user->createToken($request->email, ['admin'])->plainTextToken;
+        }else{
+            $data['token'] = $user->createToken($request->email)->plainTextToken;
+        }
+        
         $data['user'] = $user;
 
         if (!$graduado){

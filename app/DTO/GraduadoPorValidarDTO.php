@@ -38,9 +38,6 @@ class GraduadoPorValidarDTO
         ?string $ocupacion_informacion_adicional = null,
         ?string $experiencia_anios = null,
         ?string $habilidades_competencias = null,
-        bool $visibilidad_contacto,
-        bool $visibilidad_laboral,
-        bool $visibilidad_formacion,
     ) {
         $this->id = $id;
         $this->nombre = $nombre;
@@ -57,8 +54,5 @@ class GraduadoPorValidarDTO
         $this->interes_comunidad = $interes_comunidad;
         $this->interes_oferta = $interes_oferta;
         $this->interes_demanda = $interes_demanda;
-        $this->visibilidad_contacto = $visibilidad_contacto;
-        $this->visibilidad_laboral = $visibilidad_laboral;
-        $this->visibilidad_formacion = $visibilidad_formacion;
     }
 }

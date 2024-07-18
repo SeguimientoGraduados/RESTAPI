@@ -23,7 +23,7 @@ class GraduadosSeeder extends Seeder
                 'ocupacion_sector' => 'privado',
                 'ocupacion_informacion_adicional' => 'Consultora de TI especializada en ciberseguridad.',
                 'experiencia_anios' => 'menos_5',
-                'habilidades_competencias' => '"Python, Cybersecurity, AWS"',
+                'habilidades_competencias' => 'Python, Cybersecurity, AWS',
                 'cv' => 'https://drive.google.com/drive/u/0/folders/18FEyG4weYZdZOEiRE0xB14LERPmjjkO2',
                 'interes_comunidad' => true,
                 'interes_oferta' => true,
