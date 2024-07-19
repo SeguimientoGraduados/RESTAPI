@@ -51,11 +51,11 @@ class GraduadoController extends Controller
     public function obtenerGraduadosConFiltros(Request $request)
     {
         $filters = $this->getRequestFilters($request);
-        
+
         $isAdmin = false;
-        
+
         $user = $request->user();
-        
+
         if ($user && $user->rol == User::ROL_ADMIN) {
             $isAdmin = true;
         }
@@ -75,7 +75,8 @@ class GraduadoController extends Controller
      *         description="Datos personales del graduado",
      *         @OA\JsonContent(
      *             type="object",
-     *             @OA\Property(property="nombre", type="string", example="John Doe"),
+     *             @OA\Property(property="nombre", type="string", example="John"),
+     *             @OA\Property(property="apellido", type="string", example="Doe"),
      *             @OA\Property(property="email", type="string", example="johndoe@example.com"),
      *             @OA\Property(property="carrera", type="string", example="Ingeniería en Sistemas"),
      *             @OA\Property(property="anio_graduacion", type="integer", example=2020),
@@ -158,6 +159,52 @@ class GraduadoController extends Controller
         return response()->json(['message' => 'Graduado registrado exitosamente'], 201);
     }
 
+    /**
+     * @OA\Put(
+     *     path="/api/graduados",
+     *     summary="Actualizar datos del graduado",
+     *     security={{ "bearer_token": {} }},
+     *     tags={"Registro Graduado"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 @OA\Property(property="contacto", type="string", example="johndoe@example.com"),
+     *                 @OA\Property(property="nombre", type="string", example="John"),
+     *                 @OA\Property(property="apellido", type="string", example="Doe"),
+     *                 @OA\Property(property="direccion", type="string", example="123 Main St"),
+     *                 @OA\Property(property="ciudad", type="string", example="Springfield"),
+     *                 @OA\Property(property="pais", type="string", example="USA"),
+     *                 @OA\Property(property="telefono", type="string", example="+1234567890"),
+     *                 @OA\Property(property="fecha_graduacion", type="string", format="date", example="2020-05-15"),
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Graduado actualizado exitosamente",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="Graduado actualizado exitosamente")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="No autorizado",
+     *         @OA\JsonContent(type="object", @OA\Property(property="error", type="string"))
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Error en la actualización",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="error", type="string", example="Error message")
+     *         )
+     *     )
+     * )
+     */
     public function actualizarDatosGraduado(Request $request)
     {
         $graduado = Graduado::where('contacto', $request->input('contacto'))->first();

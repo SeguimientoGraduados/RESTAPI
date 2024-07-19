@@ -17,6 +17,7 @@ class LoginRegisterController extends Controller
      * @OA\Post(
      *     path="/api/register",
      *     summary="Registrar un nuevo usuario",
+     *     description="Para pasar siempre las verificaciones CAPTCHA, usar token de prueba. Secret key: 6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe.",
      *     tags={"Autenticación"},
      *     @OA\RequestBody(
      *         required=true,
@@ -26,23 +27,37 @@ class LoginRegisterController extends Controller
      *                 type="object",
      *                 @OA\Property(property="name", type="string", example="John Doe"),
      *                 @OA\Property(property="email", type="string", example="johndoe@example.com"),
-     *                 @OA\Property(property="password", type="string", format="password", example="password123")
+     *                 @OA\Property(property="password", type="string", format="password", example="password123"),
+     *                 @OA\Property(property="captchaToken", type="string", example="your-recaptcha-token")
      *             )
      *         )
      *     ),
-     *     @OA\Response(
+     * @OA\Response(
      *         response=201,
      *         description="Usuario registrado exitosamente",
      *         @OA\JsonContent(
-     *             type="object",
      *             @OA\Property(property="status", type="string", example="success"),
      *             @OA\Property(property="message", type="string", example="User is created successfully."),
      *             @OA\Property(
      *                 property="data",
      *                 type="object",
-     *                 @OA\Property(property="token", type="string"),
-     *                 @OA\Property(property="user", type="object")
+     *                 @OA\Property(property="token", type="string", example="Bearer eyJ0eXAiOiJKV1QiLCJhbGciOi..."),
+     *                 @OA\Property(
+     *                     property="user",
+     *                     type="object",
+     *                     @OA\Property(property="name", type="string", example="John Doe"),
+     *                     @OA\Property(property="email", type="string", example="johndoe@example.com"),
+     *                     @OA\Property(property="rol", type="string", example="user")
+     *                 ),
+     *                 @OA\Property(property="graduado", type="boolean", example=false)
      *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Error en la validación del CAPTCHA",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Invalid CAPTCHA")
      *         )
      *     ),
      *     @OA\Response(
@@ -62,7 +77,8 @@ class LoginRegisterController extends Controller
         $validate = Validator::make($request->all(), [
             'name' => 'required|string|max:250',
             'email' => 'required|string|email:rfc,dns|max:250|unique:users,email',
-            'password' => 'required|string|' //min:8|confirmed
+            'password' => 'required|string|', //min:8|confirmed
+            'captchaToken' => 'required'
         ]);
 
         if ($validate->fails()) {
@@ -107,6 +123,7 @@ class LoginRegisterController extends Controller
      * @OA\Post(
      *     path="/api/login",
      *     summary="Autenticar usuario",
+     *     description="Para pasar siempre las verificaciones CAPTCHA, usar token de prueba. Secret key: 6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe.",
      *     tags={"Autenticación"},
      *     @OA\RequestBody(
      *         required=true,
@@ -115,7 +132,8 @@ class LoginRegisterController extends Controller
      *             @OA\Schema(
      *                 type="object",
      *                 @OA\Property(property="email", type="string", example="johndoe@example.com"),
-     *                 @OA\Property(property="password", type="string", format="password", example="password123")
+     *                 @OA\Property(property="password", type="string", format="password", example="password123"),
+     *                 @OA\Property(property="captchaToken", type="string", example="CAPTCHA token")
      *             )
      *         )
      *     ),
@@ -130,8 +148,17 @@ class LoginRegisterController extends Controller
      *                 property="data",
      *                 type="object",
      *                 @OA\Property(property="token", type="string"),
-     *                 @OA\Property(property="user", type="object")
+     *                 @OA\Property(property="user", type="object"),
+     *                 @OA\Property(property="graduado", type="boolean")
      *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="CAPTCHA inválido",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="Invalid CAPTCHA")
      *         )
      *     ),
      *     @OA\Response(
@@ -179,7 +206,7 @@ class LoginRegisterController extends Controller
                 'data' => $validate->errors(),
             ], 403);
         }
-        
+
         $captchaValid = $this->validateRecaptcha($request->captchaToken);
 
         if (!$captchaValid) {

@@ -11,6 +11,7 @@
                     "Autenticación"
                 ],
                 "summary": "Registrar un nuevo usuario",
+                "description": "Para pasar siempre las verificaciones CAPTCHA, usar token de prueba. Secret key: 6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe.",
                 "operationId": "933155230278d9d3896c5cd6cd5bc49e",
                 "requestBody": {
                     "required": true,
@@ -30,6 +31,10 @@
                                         "type": "string",
                                         "format": "password",
                                         "example": "password123"
+                                    },
+                                    "captchaToken": {
+                                        "type": "string",
+                                        "example": "your-recaptcha-token"
                                     }
                                 },
                                 "type": "object"
@@ -55,13 +60,48 @@
                                         "data": {
                                             "properties": {
                                                 "token": {
-                                                    "type": "string"
+                                                    "type": "string",
+                                                    "example": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOi..."
                                                 },
                                                 "user": {
+                                                    "properties": {
+                                                        "name": {
+                                                            "type": "string",
+                                                            "example": "John Doe"
+                                                        },
+                                                        "email": {
+                                                            "type": "string",
+                                                            "example": "johndoe@example.com"
+                                                        },
+                                                        "rol": {
+                                                            "type": "string",
+                                                            "example": "user"
+                                                        }
+                                                    },
                                                     "type": "object"
+                                                },
+                                                "graduado": {
+                                                    "type": "boolean",
+                                                    "example": false
                                                 }
                                             },
                                             "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error en la validación del CAPTCHA",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Invalid CAPTCHA"
                                         }
                                     },
                                     "type": "object"
@@ -101,6 +141,7 @@
                     "Autenticación"
                 ],
                 "summary": "Autenticar usuario",
+                "description": "Para pasar siempre las verificaciones CAPTCHA, usar token de prueba. Secret key: 6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe.",
                 "operationId": "917524fb4dc2c3895da3af1aebf7067e",
                 "requestBody": {
                     "required": true,
@@ -116,6 +157,10 @@
                                         "type": "string",
                                         "format": "password",
                                         "example": "password123"
+                                    },
+                                    "captchaToken": {
+                                        "type": "string",
+                                        "example": "CAPTCHA token"
                                     }
                                 },
                                 "type": "object"
@@ -145,9 +190,28 @@
                                                 },
                                                 "user": {
                                                     "type": "object"
+                                                },
+                                                "graduado": {
+                                                    "type": "boolean"
                                                 }
                                             },
                                             "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "CAPTCHA inválido",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Invalid CAPTCHA"
                                         }
                                     },
                                     "type": "object"
@@ -349,7 +413,11 @@
                                     "properties": {
                                         "nombre": {
                                             "type": "string",
-                                            "example": "John Doe"
+                                            "example": "John"
+                                        },
+                                        "apellido": {
+                                            "type": "string",
+                                            "example": "Doe"
                                         },
                                         "email": {
                                             "type": "string",
@@ -397,6 +465,112 @@
             }
         },
         "/api/graduados": {
+            "put": {
+                "tags": [
+                    "Registro Graduado"
+                ],
+                "summary": "Actualizar datos del graduado",
+                "operationId": "741b760d02b54e6b8ac938cc855d12e6",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "contacto": {
+                                        "type": "string",
+                                        "example": "johndoe@example.com"
+                                    },
+                                    "nombre": {
+                                        "type": "string",
+                                        "example": "John"
+                                    },
+                                    "apellido": {
+                                        "type": "string",
+                                        "example": "Doe"
+                                    },
+                                    "direccion": {
+                                        "type": "string",
+                                        "example": "123 Main St"
+                                    },
+                                    "ciudad": {
+                                        "type": "string",
+                                        "example": "Springfield"
+                                    },
+                                    "pais": {
+                                        "type": "string",
+                                        "example": "USA"
+                                    },
+                                    "telefono": {
+                                        "type": "string",
+                                        "example": "+1234567890"
+                                    },
+                                    "fecha_graduacion": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2020-05-15"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Graduado actualizado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Graduado actualizado exitosamente"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autorizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error en la actualización",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Error message"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
             "post": {
                 "tags": [
                     "Registro Graduado"
@@ -884,44 +1058,8 @@
             "description": "Autenticación"
         },
         {
-            "name": "Autenticación",
-            "description": "Autenticación"
-        },
-        {
-            "name": "Autenticación",
-            "description": "Autenticación"
-        },
-        {
             "name": "Filtros",
             "description": "Filtros"
-        },
-        {
-            "name": "Filtros",
-            "description": "Filtros"
-        },
-        {
-            "name": "Registro Graduado",
-            "description": "Registro Graduado"
-        },
-        {
-            "name": "Registro Graduado",
-            "description": "Registro Graduado"
-        },
-        {
-            "name": "Registro Graduado",
-            "description": "Registro Graduado"
-        },
-        {
-            "name": "Registro Graduado",
-            "description": "Registro Graduado"
-        },
-        {
-            "name": "Registro Graduado",
-            "description": "Registro Graduado"
-        },
-        {
-            "name": "Registro Graduado",
-            "description": "Registro Graduado"
         },
         {
             "name": "Registro Graduado",
