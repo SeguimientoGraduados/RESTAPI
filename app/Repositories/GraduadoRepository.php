@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\GraduadoImportado;
 use App\Repositories\Interfaces\IGraduadoRepository;
 use App\Models\Graduado;
 use App\Models\Carrera;
@@ -90,7 +91,7 @@ class GraduadoRepository implements IGraduadoRepository
                     $isAdmin || $graduado->visibilidad_laboral ? $graduado->ocupacion_empresa : null,
                     $isAdmin || $graduado->visibilidad_laboral ? $graduado->ocupacion_sector : null,
                     $isAdmin || $graduado->visibilidad_laboral ? $graduado->ocupacion_informacion_adicional : null,
-                    $isAdmin || $graduado->visibilidad_laboral ? $this->formatearExperiencia($graduado->experiencia_anios): '',
+                    $isAdmin || $graduado->visibilidad_laboral ? $this->formatearExperiencia($graduado->experiencia_anios) : '',
                     $isAdmin || $graduado->visibilidad_laboral ? $graduado->habilidades_competencias : null,
                     $isAdmin || $graduado->visibilidad_formacion ? ($graduado->formaciones ? $graduado->formaciones->toArray() : null) : [],
                     $isAdmin || $graduado->visibilidad_contacto ? ($graduado->rrss ? $graduado->rrss->toArray() : null) : [],
@@ -231,6 +232,10 @@ class GraduadoRepository implements IGraduadoRepository
                     ]);
                 }
             }
+            if ($this->verificarGraduadoEnCsv($graduadoParaRegistroDTO)) {
+                $this->aprobarGraduado($graduado->id);
+            }
+            $graduado->save();
             DB::commit();
             return ['success' => true];
         } catch (\Exception $e) {
@@ -239,6 +244,20 @@ class GraduadoRepository implements IGraduadoRepository
                 'error' => 'Hubo un error al registrar el graduado: ' . $e->getMessage()
             ];
         }
+    }
+
+    public function verificarGraduadoEnCsv(GraduadoParaRegistroDTO $graduadoParaRegistroDTO)
+    {
+
+        $graduado = GraduadoImportado::where('dni', $graduadoParaRegistroDTO->dni)->first();
+
+        if ($graduado) {
+            $primeraCarrera = !empty($graduadoParaRegistroDTO->carreras) ? $graduadoParaRegistroDTO->carreras[0] : null;
+
+            return $graduado->carrera == $primeraCarrera;
+        }
+
+        return false;
     }
 
     public function actualizarGraduado(GraduadoParaRegistroDTO $graduadoParaRegistroDTO)
