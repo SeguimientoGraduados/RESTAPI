@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\Rule;
 use App\Models\Graduado;
 use App\Models\User;
+use App\Imports\GraduadosImport;
 
 class GraduadoController extends Controller
 {
@@ -495,6 +496,20 @@ class GraduadoController extends Controller
         $graduadosList = $this->crearListaGraduadosParaExcel($ciudadesConGraduados);
 
         return Excel::download(new GraduadosExport($graduadosList), 'graduados.csv');
+    }
+
+    public function importarGraduadosCsv(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:csv,txt'
+        ]);
+
+        try {
+            Excel::import(new GraduadosImport, $request->file('file'));
+            return response()->json(['message' => 'Archivo importado exitosamente.'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     private function getRequestFilters(Request $request)
