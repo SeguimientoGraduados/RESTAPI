@@ -52,11 +52,10 @@
         <div class="content">
             <p>Estimado/a,</p>
             <p>Nos complace informarle que su solicitud de registro ha sido evaluada y aprobada con éxito.</p>
-            <p>Si tiene alguna pregunta, no dude en ponerse en contacto con nosotros.</p>
+            <p>Le informamos que ya ha sido incluido/a en nuestro registro.</p>
         </div>
         <div class="footer">
             <p>Gracias por confiar en nosotros.</p>
-            <p>Atentamente,<br>El equipo de Graduados Uns</p>
         </div>
     </div>
 </body>

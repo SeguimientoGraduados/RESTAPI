@@ -52,11 +52,10 @@
         <div class="content">
             <p>Estimado/a,</p>
             <p>Lamentamos informarle que su solicitud de registro ha sido evaluada y no ha sido aprobada en esta ocasión.</p>
-            <p>Si tiene alguna pregunta o necesita más información sobre el motivo del rechazo, no dude en ponerse en contacto con nosotros.</p>
+            <p>Le invitamos a intentarlo nuevamente en el futuro.</p>
         </div>
         <div class="footer">
             <p>Gracias por su comprensión.</p>
-            <p>Atentamente,<br>El equipo de Graduados Uns</p>
         </div>
     </div>
 </body>

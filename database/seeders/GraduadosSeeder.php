@@ -12,7 +12,8 @@ class GraduadosSeeder extends Seeder
     {
         $graduados = [
             [
-                'nombre' => 'Ana Pérez',
+                'nombre' => 'Ana',
+                'apellido' => 'Pérez',
                 'dni' => '23456789',
                 'fecha_nacimiento' => Carbon::parse('1990-08-15'),
                 'ciudad_id' => 2,
@@ -22,15 +23,19 @@ class GraduadosSeeder extends Seeder
                 'ocupacion_sector' => 'privado',
                 'ocupacion_informacion_adicional' => 'Consultora de TI especializada en ciberseguridad.',
                 'experiencia_anios' => 'menos_5',
-                'habilidades_competencias' => '"Python, Cybersecurity, AWS"',
+                'habilidades_competencias' => 'Python, Cybersecurity, AWS',
                 'cv' => 'https://drive.google.com/drive/u/0/folders/18FEyG4weYZdZOEiRE0xB14LERPmjjkO2',
                 'interes_comunidad' => true,
                 'interes_oferta' => true,
                 'interes_demanda' => false,
-                'validado' => true
+                'validado' => true,
+                'visibilidad_contacto' => true,
+                'visibilidad_laboral' => true,
+                'visibilidad_formacion' => false
             ],
             [
-                'nombre' => 'Javier García',
+                'nombre' => 'Javier',
+                'apellido' => 'García',
                 'dni' => '34567890',
                 'fecha_nacimiento' => Carbon::parse('1985-11-25'),
                 'ciudad_id' => 3,
@@ -45,10 +50,14 @@ class GraduadosSeeder extends Seeder
                 'interes_comunidad' => false,
                 'interes_oferta' => true,
                 'interes_demanda' => true,
-                'validado' => true
+                'validado' => true,
+                'visibilidad_contacto' => false,
+                'visibilidad_laboral' => true,
+                'visibilidad_formacion' => false
             ],
             [
-                'nombre' => 'Carla López',
+                'nombre' => 'Carla',
+                'apellido' => 'López',
                 'dni' => '45678901',
                 'fecha_nacimiento' => Carbon::parse('1992-04-12'),
                 'ciudad_id' => 4,
@@ -63,10 +72,14 @@ class GraduadosSeeder extends Seeder
                 'interes_comunidad' => true,
                 'interes_oferta' => false,
                 'interes_demanda' => true,
-                'validado' => true
+                'validado' => true,
+                'visibilidad_contacto' => true,
+                'visibilidad_laboral' => false,
+                'visibilidad_formacion' => false
             ],
             [
-                'nombre' => 'Diego Fernández',
+                'nombre' => 'Diego',
+                'apellido' => 'Fernández',
                 'dni' => '56789012',
                 'fecha_nacimiento' => Carbon::parse('1988-09-30'),
                 'ciudad_id' => 5,
@@ -81,10 +94,14 @@ class GraduadosSeeder extends Seeder
                 'interes_comunidad' => false,
                 'interes_oferta' => true,
                 'interes_demanda' => true,
-                'validado' => true
+                'validado' => true,
+                'visibilidad_contacto' => false,
+                'visibilidad_laboral' => false,
+                'visibilidad_formacion' => false
             ],
             [
-                'nombre' => 'Elena Martínez',
+                'nombre' => 'Elena',
+                'apellido' => 'Martínez',
                 'dni' => '67890123',
                 'fecha_nacimiento' => Carbon::parse('1964-02-22'),
                 'ciudad_id' => 6,
@@ -99,10 +116,14 @@ class GraduadosSeeder extends Seeder
                 'interes_comunidad' => true,
                 'interes_oferta' => false,
                 'interes_demanda' => true,
-                'validado' => true
+                'validado' => true,
+                'visibilidad_contacto' => true,
+                'visibilidad_laboral' => false,
+                'visibilidad_formacion' => true
             ],
             [
-                'nombre' => 'Federico Torres',
+                'nombre' => 'Federico',
+                'apellido' => 'Torres',
                 'dni' => '78901234',
                 'fecha_nacimiento' => Carbon::parse('1987-12-14'),
                 'ciudad_id' => 2,
@@ -117,10 +138,14 @@ class GraduadosSeeder extends Seeder
                 'interes_comunidad' => false,
                 'interes_oferta' => true,
                 'interes_demanda' => true,
-                'validado' => true
+                'validado' => true,
+                'visibilidad_contacto' => true,
+                'visibilidad_laboral' => true,
+                'visibilidad_formacion' => true
             ],
             [
-                'nombre' => 'Gabriela Sánchez',
+                'nombre' => 'Gabriela',
+                'apellido' => 'Sánchez',
                 'dni' => '89012345',
                 'fecha_nacimiento' => Carbon::parse('1991-03-05'),
                 'ciudad_id' => 3,
@@ -135,10 +160,14 @@ class GraduadosSeeder extends Seeder
                 'interes_comunidad' => true,
                 'interes_oferta' => false,
                 'interes_demanda' => true,
-                'validado' => true
+                'validado' => true,
+                'visibilidad_contacto' => false,
+                'visibilidad_laboral' => true,
+                'visibilidad_formacion' => true
             ],
             [
-                'nombre' => 'Héctor Ruiz',
+                'nombre' => 'Héctor',
+                'apellido' => 'Ruiz',
                 'dni' => '90123456',
                 'fecha_nacimiento' => Carbon::parse('1989-07-28'),
                 'ciudad_id' => 4,
@@ -153,10 +182,14 @@ class GraduadosSeeder extends Seeder
                 'interes_comunidad' => false,
                 'interes_oferta' => true,
                 'interes_demanda' => true,
-                'validado' => true
+                'validado' => true,
+                'visibilidad_contacto' => false,
+                'visibilidad_laboral' => false,
+                'visibilidad_formacion' => true
             ],
             [
-                'nombre' => 'Inés Fernández',
+                'nombre' => 'Inés',
+                'apellido' => 'Fernández',
                 'dni' => '01234567',
                 'fecha_nacimiento' => Carbon::parse('1995-01-17'),
                 'ciudad_id' => 5,
@@ -171,10 +204,14 @@ class GraduadosSeeder extends Seeder
                 'interes_comunidad' => true,
                 'interes_oferta' => false,
                 'interes_demanda' => true,
-                'validado' => true
+                'validado' => true,
+                'visibilidad_contacto' => true,
+                'visibilidad_laboral' => true,
+                'visibilidad_formacion' => false
             ],
             [
-                'nombre' => 'Juan Rodríguez',
+                'nombre' => 'Juan',
+                'apellido' => 'Rodríguez',
                 'dni' => '11223344',
                 'fecha_nacimiento' => Carbon::parse('1986-06-01'),
                 'ciudad_id' => 2,
@@ -189,10 +226,14 @@ class GraduadosSeeder extends Seeder
                 'interes_comunidad' => false,
                 'interes_oferta' => true,
                 'interes_demanda' => true,
-                'validado' => true
+                'validado' => true,
+                'visibilidad_contacto' => true,
+                'visibilidad_laboral' => false,
+                'visibilidad_formacion' => true
             ],
             [
-                'nombre' => 'Gonzalo Riquelme Ludwig',
+                'nombre' => 'Gonzalo',
+                'apellido' => 'Riquelme Ludwig',
                 'dni' => '43099502',
                 'fecha_nacimiento' => Carbon::parse('2000-11-08'),
                 'ciudad_id' => 2,
@@ -207,10 +248,14 @@ class GraduadosSeeder extends Seeder
                 'interes_comunidad' => true,
                 'interes_oferta' => false,
                 'interes_demanda' => true,
-                'validado' => false
+                'validado' => false,
+                'visibilidad_contacto' => true,
+                'visibilidad_laboral' => true,
+                'visibilidad_formacion' => false
             ],
             [
                 'nombre' => 'Dylan Hughes',
+                'apellido' => 'Hughes',
                 'dni' => '43091302',
                 'fecha_nacimiento' => Carbon::parse('2000-10-14'),
                 'ciudad_id' => 2,
@@ -225,7 +270,10 @@ class GraduadosSeeder extends Seeder
                 'interes_comunidad' => true,
                 'interes_oferta' => true,
                 'interes_demanda' => false,
-                'validado' => false
+                'validado' => false,
+                'visibilidad_contacto' => true,
+                'visibilidad_laboral' => true,
+                'visibilidad_formacion' => true
             ]
         ];
 

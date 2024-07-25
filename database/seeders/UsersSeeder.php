@@ -23,7 +23,7 @@ class UsersSeeder extends Seeder
             ],
             [
                 'name' => 'gonza hughes',
-                'email' => 'gonza@test.com',
+                'email' => 'gonzariquelme66@gmail.com',
                 'password' => Hash::make('apoyo'),
                 'rol' => User::ROL_USER,
             ]

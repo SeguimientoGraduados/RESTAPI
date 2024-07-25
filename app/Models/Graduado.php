@@ -24,4 +24,9 @@ class Graduado extends Model
     {
         return $this->hasMany(Contacto::class, 'graduado_id');
     }
+    
+    public function formaciones()
+    {
+        return $this->hasMany(Formacion::class, 'graduado_id');
+    }
 }

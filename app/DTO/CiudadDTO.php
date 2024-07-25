@@ -2,7 +2,7 @@
 
 namespace App\DTO;
 
-class CiudadDeGraduadoParaRegistroDTO
+class CiudadDTO
 {
 
     public string $nombre;

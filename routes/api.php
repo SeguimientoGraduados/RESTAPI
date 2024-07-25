@@ -1,9 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\UserController;
 use App\Http\Controllers\Auth\LoginRegisterController;
 
 /*
@@ -27,5 +24,4 @@ Route::middleware('auth:sanctum')->group( function () {
 });
 
 include 'graduados.php';
-include 'ciudades.php';
 include 'carreras.php';
