@@ -16,7 +16,7 @@ class CarreraController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/carreras",
+     *     path="/rest/carreras",
      *     summary="Obtener todas las carreras",
      *     tags={"Filtros"},
      *     @OA\Response(

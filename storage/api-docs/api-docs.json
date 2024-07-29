@@ -5,14 +5,14 @@
         "version": "1.0.0"
     },
     "paths": {
-        "/api/register": {
+        "/rest/register": {
             "post": {
                 "tags": [
                     "Autenticación"
                 ],
                 "summary": "Registrar un nuevo usuario",
                 "description": "Para pasar siempre las verificaciones CAPTCHA, usar token de prueba. Secret key: 6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe.",
-                "operationId": "933155230278d9d3896c5cd6cd5bc49e",
+                "operationId": "9c1689d40dabb4133d734a9c53bfc84c",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -135,14 +135,14 @@
                 }
             }
         },
-        "/api/login": {
+        "/rest/login": {
             "post": {
                 "tags": [
                     "Autenticación"
                 ],
                 "summary": "Autenticar usuario",
                 "description": "Para pasar siempre las verificaciones CAPTCHA, usar token de prueba. Secret key: 6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe.",
-                "operationId": "917524fb4dc2c3895da3af1aebf7067e",
+                "operationId": "47b48bb7e7552d580b6d7c5303062e29",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -285,13 +285,13 @@
                 }
             }
         },
-        "/api/logout": {
+        "/rest/logout": {
             "post": {
                 "tags": [
                     "Autenticación"
                 ],
                 "summary": "Cerrar sesión del usuario",
-                "operationId": "4ba12e66832b044d101d8feba03254c3",
+                "operationId": "711e8c4626dce084d1670a0b2dfbdea6",
                 "responses": {
                     "200": {
                         "description": "Usuario deslogueado exitosamente",
@@ -321,13 +321,13 @@
                 ]
             }
         },
-        "/api/carreras": {
+        "/rest/carreras": {
             "get": {
                 "tags": [
                     "Filtros"
                 ],
                 "summary": "Obtener todas las carreras",
-                "operationId": "387798d3e9b53b92523846e67051c8f7",
+                "operationId": "a165a3bcb200f830e4b0fbd56854fcc8",
                 "responses": {
                     "200": {
                         "description": "Lista de todas las carreras",
@@ -359,13 +359,13 @@
                 }
             }
         },
-        "/api/graduados/filtros": {
+        "/rest/graduados/filtros": {
             "get": {
                 "tags": [
                     "Filtros"
                 ],
                 "summary": "Obtener graduados con filtros",
-                "operationId": "b03606500c5e0a2ffab3c5bcbf1022ce",
+                "operationId": "7602fd4b7bfe2a0bd2e0dec886a28a3d",
                 "parameters": [
                     {
                         "name": "filtro",
@@ -397,13 +397,13 @@
                 }
             }
         },
-        "/api/graduados/perfil": {
+        "/rest/graduados/perfil": {
             "get": {
                 "tags": [
                     "Registro Graduado"
                 ],
                 "summary": "Obtener datos personales del graduado autenticado",
-                "operationId": "547865de835bb6aa6e4148370b0722cd",
+                "operationId": "af26c0c2c20d9e05f0be0b3331af2c6e",
                 "responses": {
                     "200": {
                         "description": "Datos personales del graduado",
@@ -464,13 +464,13 @@
                 ]
             }
         },
-        "/api/graduados": {
+        "/rest/graduados": {
             "put": {
                 "tags": [
                     "Registro Graduado"
                 ],
                 "summary": "Actualizar datos del graduado",
-                "operationId": "741b760d02b54e6b8ac938cc855d12e6",
+                "operationId": "8c0f2cadadfdeb949f14cbaf14238816",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -576,7 +576,7 @@
                     "Registro Graduado"
                 ],
                 "summary": "Registrar un nuevo graduado",
-                "operationId": "e978136313b5c96e3eccd2133bc07da0",
+                "operationId": "5835305791e1fc32b35855b5900dd744",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -655,13 +655,13 @@
                 ]
             }
         },
-        "/api/graduados/validar": {
+        "/rest/graduados/validar": {
             "get": {
                 "tags": [
                     "Registro Graduado"
                 ],
                 "summary": "Obtener graduados pendientes de validación",
-                "operationId": "45c17d833b89f04f9fc98e4c9304cc3b",
+                "operationId": "22542fe5d7aa3540241ac88f07b3c204",
                 "responses": {
                     "200": {
                         "description": "Lista de graduados por validar",
@@ -702,13 +702,13 @@
                 ]
             }
         },
-        "/api/graduados/validar/aprobar/{id}": {
+        "/rest/graduados/validar/aprobar/{id}": {
             "patch": {
                 "tags": [
                     "Registro Graduado"
                 ],
                 "summary": "Aprobar un graduado",
-                "operationId": "ae5d65e60b2af71cc5960ad2ee1d5dc2",
+                "operationId": "0dd7b94e91643d6568a34eef800a1ab6",
                 "parameters": [
                     {
                         "name": "id",
@@ -777,13 +777,13 @@
                 ]
             }
         },
-        "/api/graduados/validar/rechazar/{id}": {
+        "/rest/graduados/validar/rechazar/{id}": {
             "delete": {
                 "tags": [
                     "Registro Graduado"
                 ],
                 "summary": "Rechazar un graduado",
-                "operationId": "206a361f83167b1c1fe4bc44583be7ae",
+                "operationId": "cf4c65328db07765d2089b6b3b3ac69d",
                 "parameters": [
                     {
                         "name": "id",
@@ -852,13 +852,13 @@
                 ]
             }
         },
-        "/api/graduados/enumerados": {
+        "/rest/graduados/enumerados": {
             "get": {
                 "tags": [
                     "Registro Graduado"
                 ],
                 "summary": "Obtener enumerados",
-                "operationId": "b9a01e9784e77d2ca76b3ce9f25a2779",
+                "operationId": "e9c03023ee0233413acad5d094badf26",
                 "responses": {
                     "200": {
                         "description": "Listado de enumerados",
@@ -951,13 +951,13 @@
                 ]
             }
         },
-        "/api/graduados/exportar-excel": {
+        "/rest/graduados/exportar-excel": {
             "get": {
                 "tags": [
                     "Registro Graduado"
                 ],
                 "summary": "Exportar graduados filtrados a Excel",
-                "operationId": "fe785c474e0bd4c38dabf4a39659658e",
+                "operationId": "dceecf48d0bc9c9b3ed5284de42adabc",
                 "parameters": [
                     {
                         "name": "pais",

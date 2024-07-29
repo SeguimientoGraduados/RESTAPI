@@ -15,7 +15,7 @@ class LoginRegisterController extends Controller
 {
     /**
      * @OA\Post(
-     *     path="/api/register",
+     *     path="/rest/register",
      *     summary="Registrar un nuevo usuario",
      *     description="Para pasar siempre las verificaciones CAPTCHA, usar token de prueba. Secret key: 6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe.",
      *     tags={"Autenticación"},
@@ -121,7 +121,7 @@ class LoginRegisterController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/login",
+     *     path="/rest/login",
      *     summary="Autenticar usuario",
      *     description="Para pasar siempre las verificaciones CAPTCHA, usar token de prueba. Secret key: 6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe.",
      *     tags={"Autenticación"},
@@ -256,7 +256,7 @@ class LoginRegisterController extends Controller
     public function validateRecaptcha($token)
     {
 
-        $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+        $response = Http::asForm()->post('https://www.google.com/recaptcha/rest/siteverify', [
             'secret' => env('APP_PUBLIC_SECRET_KEY'),
             'response' => $token
         ]);
@@ -266,7 +266,7 @@ class LoginRegisterController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/logout",
+     *     path="/rest/logout",
      *     summary="Cerrar sesión del usuario",
      *     security={{ "bearer_token": {} }},
      *     tags={"Autenticación"},

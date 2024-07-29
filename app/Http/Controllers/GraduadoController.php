@@ -28,7 +28,7 @@ class GraduadoController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/graduados/filtros",
+     *     path="/rest/graduados/filtros",
      *     summary="Obtener graduados con filtros",
      *     tags={"Filtros"},
      *     @OA\Parameter(
@@ -67,7 +67,7 @@ class GraduadoController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/graduados/perfil",
+     *     path="/rest/graduados/perfil",
      *     summary="Obtener datos personales del graduado autenticado",
      *     tags={"Registro Graduado"},
      *     security={{"bearer_token":{}}},
@@ -114,7 +114,7 @@ class GraduadoController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/graduados",
+     *     path="/rest/graduados",
      *     summary="Registrar un nuevo graduado",
      *     security={{ "bearer_token": {} }},
      *     tags={"Registro Graduado"},
@@ -162,7 +162,7 @@ class GraduadoController extends Controller
 
     /**
      * @OA\Put(
-     *     path="/api/graduados",
+     *     path="/rest/graduados",
      *     summary="Actualizar datos del graduado",
      *     security={{ "bearer_token": {} }},
      *     tags={"Registro Graduado"},
@@ -224,7 +224,7 @@ class GraduadoController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/graduados/validar",
+     *     path="/rest/graduados/validar",
      *     summary="Obtener graduados pendientes de validación",
      *     security={{ "bearer_token": {} }},
      *     tags={"Registro Graduado"},
@@ -253,7 +253,7 @@ class GraduadoController extends Controller
 
     /**
      * @OA\Patch(
-     *     path="/api/graduados/validar/aprobar/{id}",
+     *     path="/rest/graduados/validar/aprobar/{id}",
      *     summary="Aprobar un graduado",
      *     security={{ "bearer_token": {} }},
      *     tags={"Registro Graduado"},
@@ -292,7 +292,7 @@ class GraduadoController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/api/graduados/validar/rechazar/{id}",
+     *     path="/rest/graduados/validar/rechazar/{id}",
      *     summary="Rechazar un graduado",
      *     security={{ "bearer_token": {} }},
      *     tags={"Registro Graduado"},
@@ -331,7 +331,7 @@ class GraduadoController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/graduados/enumerados",
+     *     path="/rest/graduados/enumerados",
      *     summary="Obtener enumerados",
      *     security={{ "bearer_token": {} }},
      *     tags={"Registro Graduado"},
@@ -424,7 +424,7 @@ class GraduadoController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/graduados/exportar-excel",
+     *     path="/rest/graduados/exportar-excel",
      *     summary="Exportar graduados filtrados a Excel",
      *     security={{ "bearer_token": {} }},
      *     tags={"Registro Graduado"},
