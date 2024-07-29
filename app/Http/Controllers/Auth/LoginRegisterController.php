@@ -256,7 +256,7 @@ class LoginRegisterController extends Controller
     public function validateRecaptcha($token)
     {
 
-        $response = Http::asForm()->post('https://www.google.com/recaptcha/rest/siteverify', [
+        $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
             'secret' => env('APP_PUBLIC_SECRET_KEY'),
             'response' => $token
         ]);
