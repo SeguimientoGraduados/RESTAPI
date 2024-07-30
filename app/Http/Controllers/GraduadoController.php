@@ -16,6 +16,8 @@ use Illuminate\Validation\Rule;
 use App\Models\Graduado;
 use App\Models\User;
 use App\Imports\GraduadosImport;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+
 
 class GraduadoController extends Controller
 {
@@ -495,7 +497,15 @@ class GraduadoController extends Controller
 
         $graduadosList = $this->crearListaGraduadosParaExcel($ciudadesConGraduados);
 
-        return Excel::download(new GraduadosExport($graduadosList), 'graduados.csv');
+        $fileContent = Excel::raw(new GraduadosExport($graduadosList), \Maatwebsite\Excel\Excel::CSV);
+
+        return new StreamedResponse(function () use ($fileContent) {
+            echo $fileContent;
+        }, 200, [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="graduados.csv"',
+        ]);
+
     }
 
     public function importarGraduadosCsv(Request $request)
