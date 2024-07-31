@@ -604,8 +604,9 @@ class GraduadoController extends Controller
 
     private function cambiarEstadoGraduado($id, $metodo, $plantillaCorreo)
     {
-        $resultado = $this->graduadoRepository->$metodo($id);
+
         $graduadoMail = $this->graduadoRepository->obtenerEmailGraduado($id);
+        $resultado = $this->graduadoRepository->$metodo($id);
 
         if (isset($resultado['error'])) {
             return response()->json(['error' => $resultado['error']], 400);
