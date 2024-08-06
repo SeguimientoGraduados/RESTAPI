@@ -17,6 +17,7 @@ use App\Models\Graduado;
 use App\Models\User;
 use App\Imports\GraduadosImport;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Illuminate\Support\Facades\Log;
 
 
 class GraduadoController extends Controller
@@ -492,20 +493,30 @@ class GraduadoController extends Controller
      */
     public function obtenerGraduadosPorFiltroExportarExcel(Request $request)
     {
-        $filters = $this->getRequestFilters($request);
-        $ciudadesConGraduados = $this->graduadoRepository->obtenerGraduadosConFiltros($filters);
+        try {
+            $filters = $this->getRequestFilters($request);
+            $ciudadesConGraduados = $this->graduadoRepository->obtenerGraduadosConFiltros($filters);
 
-        $graduadosList = $this->crearListaGraduadosParaExcel($ciudadesConGraduados);
+            $graduadosList = $this->crearListaGraduadosParaExcel($ciudadesConGraduados);
 
-        $fileContent = Excel::raw(new GraduadosExport($graduadosList), \Maatwebsite\Excel\Excel::CSV);
+            $fileContent = Excel::raw(new GraduadosExport($graduadosList), \Maatwebsite\Excel\Excel::CSV);
 
-        return new StreamedResponse(function () use ($fileContent) {
-            echo $fileContent;
-        }, 200, [
-            'Content-Type' => 'text/csv',
-            'Content-Disposition' => 'attachment; filename="graduados.csv"',
-        ]);
-
+            return new StreamedResponse(function () use ($fileContent) {
+                echo $fileContent;
+            }, 200, [
+                'Content-Type' => 'text/csv',
+                'Content-Disposition' => 'attachment; filename="graduados.csv"',
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error al generar el archivo CSV', [
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'filters' => $filters,
+                'ciudadesConGraduados' => isset($ciudadesConGraduados) ? count($ciudadesConGraduados) . ' items' : 'No disponible',
+            ]);
+            return response()->json(['error' => 'Error interno del servidor.'], 500);
+        }
     }
 
     public function importarGraduadosCsv(Request $request)

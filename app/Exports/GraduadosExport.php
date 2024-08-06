@@ -5,6 +5,7 @@ namespace App\Exports;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Illuminate\Support\Collection;
 
+ini_set('memory_limit', '-1');
 class GraduadosExport implements FromCollection
 {
     protected $graduadosList;
