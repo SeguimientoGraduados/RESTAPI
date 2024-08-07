@@ -15,7 +15,7 @@
 6. Iniciar el servidor local con el comando: `php artisan serve`.
 
 ## Descripción del API REST usando Laravel 10 
-Esta API fue desarrollada como backend para la aplicación [Graduados UNS]. Puedes encontrar el repositorio del frontend en la siguiente URL: [https://github.com/SeguimientoGraduados/SPA](https://github.com/SeguimientoGraduados/SPA).
+Esta API fue desarrollada como backend para la aplicación [Graduados UNS](https://graduados.vercel.app/). Puedes encontrar el repositorio del frontend en la siguiente URL: [https://github.com/SeguimientoGraduados/SPA](https://github.com/SeguimientoGraduados/SPA).
 
 La API abarca toda la lógica del negocio vinculada a esta aplicación y todo lo asociado a la autenticación de usuarios, que se realizó utilizando la libreria de Sanctum. Se manejan diferentes roles para los endpoints, y la mayoría requiere que un usuario esté logueado, mientras que algunos exclusivamente requieren que el usuario sea administrador.
 
