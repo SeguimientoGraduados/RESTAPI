@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
 use Validator;
+use Illuminate\Support\Str;
 
 class LoginRegisterController extends Controller
 {
@@ -81,10 +82,10 @@ class LoginRegisterController extends Controller
                 'required',
                 'string',
                 'min:8',
-                'regex:/[a-z]/', 
+                'regex:/[a-z]/',
                 'regex:/[A-Z]/',
-                'regex:/[0-9]/', 
-                'confirmed', 
+                'regex:/[0-9]/',
+                'confirmed',
             ],
             'captchaToken' => 'required'
         ]);
@@ -103,8 +104,9 @@ class LoginRegisterController extends Controller
             return response()->json(['message' => 'Invalid CAPTCHA'], 400);
         }
 
+        $formattedName = ucfirst(strtolower($request->name));
         $user = User::create([
-            'name' => $request->name,
+            'name' => $formattedName,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'rol' => User::ROL_USER
