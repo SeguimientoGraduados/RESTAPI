@@ -217,12 +217,6 @@ class LoginRegisterController extends Controller
             ], 403);
         }
 
-        $captchaValid = $this->validateRecaptcha($request->captchaToken);
-
-        if (!$captchaValid) {
-            return response()->json(['message' => 'Invalid CAPTCHA'], 400);
-        }
-
         $user = User::where('email', $request->email)->first();
         $graduado = Graduado::where('contacto', $request->email)->first();
 
@@ -238,6 +232,12 @@ class LoginRegisterController extends Controller
                 'status' => 'failed',
                 'message' => 'Incorrect password'
             ], 401);
+        }
+
+        $captchaValid = $this->validateRecaptcha($request->captchaToken);
+
+        if (!$captchaValid) {
+            return response()->json(['message' => 'Invalid CAPTCHA'], 400);
         }
 
         if ($user->rol == User::ROL_ADMIN) {

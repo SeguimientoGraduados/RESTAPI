@@ -254,10 +254,10 @@ class GraduadosSeeder extends Seeder
                 'visibilidad_formacion' => false
             ],
             [
-                'nombre' => 'Dylan Hughes',
+                'nombre' => 'Dylan',
                 'apellido' => 'Hughes',
                 'dni' => '43091302',
-                'fecha_nacimiento' => Carbon::parse('2000-10-14'),
+                'fecha_nacimiento' => Carbon::parse('2000-10-13'),
                 'ciudad_id' => 2,
                 'contacto' => 'dylanhughes028@gmail.com',
                 'ocupacion_trabajo' => 'rel_dependencia',
