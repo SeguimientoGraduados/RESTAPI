@@ -19,11 +19,6 @@ return new class extends Migration {
             $table->unsignedBigInteger('ciudad_id');
             $table->string('contacto')->unique();
 
-            $table->enum('ocupacion_trabajo', ['rel_dependencia', 'autonomo'])->nullable();
-            $table->string('ocupacion_empresa')->nullable();
-            $table->enum('ocupacion_sector', ['privado', 'publico'])->nullable();
-            $table->text('ocupacion_informacion_adicional')->nullable();
-
             $table->enum('experiencia_anios', ['menos_5', 'de_5_a_10', 'de_10_a_20', 'mas_20'])->nullable();
             $table->text('habilidades_competencias')->nullable();
 

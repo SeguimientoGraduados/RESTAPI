@@ -20,6 +20,11 @@ class Graduado extends Model
         return $this->belongsToMany(Carrera::class, 'carrera_graduado', 'graduado_id', 'carrera_id')->withPivot('anio_graduacion');
     }
 
+    public function ocupaciones()
+    {
+        return $this->hasMany(Ocupacion::class, 'graduado_id');
+    }
+
     public function rrss()
     {
         return $this->hasMany(Contacto::class, 'graduado_id');

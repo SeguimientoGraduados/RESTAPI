@@ -11,6 +11,7 @@ use App\Models\Pais;
 use App\Models\Departamento;
 use App\Models\Formacion;
 use App\Models\Contacto;
+use App\Models\Ocupacion;
 use App\DTO\GraduadoParaMapaDTO;
 use App\DTO\GraduadoParaEditarDTO;
 use App\DTO\CarreraDeGraduadoCompletoDTO;
@@ -79,6 +80,15 @@ class GraduadoRepository implements IGraduadoRepository
         foreach ($graduadosPorCiudad as $ciudadId => $graduados) {
             $ciudad = $graduados->first()->ciudad;
             $graduadoDTOs = $graduados->map(function ($graduado) use ($isAdmin) {
+                $ocupaciones = $graduado->ocupaciones->map(function ($ocupacion) use ($isAdmin) {
+                    return [
+                        'trabajo' => $isAdmin || $ocupacion->visibilidad ? $ocupacion->trabajo : null,
+                        'empresa' => $isAdmin || $ocupacion->visibilidad ? $ocupacion->empresa : null,
+                        'sector' => $isAdmin || $ocupacion->visibilidad ? $ocupacion->sector : null,
+                        'informacion_adicional' => $isAdmin || $ocupacion->visibilidad ? $ocupacion->informacion_adicional : null,
+                    ];
+                })->toArray();
+
                 return new GraduadoParaMapaDTO(
                     $graduado->id,
                     $graduado->nombre,
@@ -87,10 +97,7 @@ class GraduadoRepository implements IGraduadoRepository
                     $isAdmin ? $graduado->fecha_nacimiento : '',
                     $this->formatearCarreras($graduado->carreras),
                     $isAdmin || $graduado->visibilidad_contacto ? $graduado->contacto : '',
-                    $isAdmin || $graduado->visibilidad_laboral ? $graduado->ocupacion_trabajo : null,
-                    $isAdmin || $graduado->visibilidad_laboral ? $graduado->ocupacion_empresa : null,
-                    $isAdmin || $graduado->visibilidad_laboral ? $graduado->ocupacion_sector : null,
-                    $isAdmin || $graduado->visibilidad_laboral ? $graduado->ocupacion_informacion_adicional : null,
+                    $ocupaciones,
                     $isAdmin || $graduado->visibilidad_laboral ? $this->formatearExperiencia($graduado->experiencia_anios) : '',
                     $isAdmin || $graduado->visibilidad_laboral ? $graduado->habilidades_competencias : null,
                     $isAdmin || $graduado->visibilidad_formacion ? ($graduado->formaciones ? $graduado->formaciones->toArray() : null) : [],
@@ -111,6 +118,7 @@ class GraduadoRepository implements IGraduadoRepository
                 ],
             ];
         }
+
 
         return $result;
     }
@@ -134,10 +142,7 @@ class GraduadoRepository implements IGraduadoRepository
                 $graduado->interes_comunidad,
                 $graduado->interes_oferta,
                 $graduado->interes_demanda,
-                $graduado->ocupacion_trabajo,
-                $graduado->ocupacion_empresa,
-                $graduado->ocupacion_sector,
-                $graduado->ocupacion_informacion_adicional,
+                $graduado->ocupaciones,
                 $graduado->experiencia_anios,
                 $graduado->habilidades_competencias,
                 $graduado->formaciones ? $graduado->formaciones->toArray() : null,
@@ -165,10 +170,6 @@ class GraduadoRepository implements IGraduadoRepository
             $graduado->dni = $graduadoParaRegistroDTO->dni;
             $graduado->fecha_nacimiento = $graduadoParaRegistroDTO->fecha_nacimiento;
             $graduado->contacto = $graduadoParaRegistroDTO->contacto;
-            $graduado->ocupacion_trabajo = $graduadoParaRegistroDTO->ocupacion_trabajo;
-            $graduado->ocupacion_empresa = $graduadoParaRegistroDTO->ocupacion_empresa;
-            $graduado->ocupacion_sector = $graduadoParaRegistroDTO->ocupacion_sector;
-            $graduado->ocupacion_informacion_adicional = $graduadoParaRegistroDTO->ocupacion_informacion_adicional;
             $graduado->experiencia_anios = $graduadoParaRegistroDTO->experiencia_anios;
             $graduado->habilidades_competencias = $graduadoParaRegistroDTO->habilidades_competencias;
             $graduado->cv = $graduadoParaRegistroDTO->cv;
@@ -210,6 +211,16 @@ class GraduadoRepository implements IGraduadoRepository
                     }
                     $graduado->carreras()->attach($carrera->id, ['anio_graduacion' => $carreraData['anio_graduacion']]);
                 }
+            }
+
+            foreach ($graduadoParaRegistroDTO->ocupaciones as $ocupacionData) {
+                $ocupacion = Ocupacion::firstOrCreate([
+                    'ocupacion_trabajo' => $ocupacionData['ocupacion_trabajo'],
+                    'ocupacion_empresa' => $ocupacionData['ocupacion_empresa'],
+                    'ocupacion_sector' => $ocupacionData['ocupacion_sector'],
+                    'ocupacion_informacion_adicional' => $ocupacionData['ocupacion_informacion_adicional'],
+                    'graduado_id' => $graduado->id
+                ]);
             }
 
             if ($graduadoParaRegistroDTO->formacion) {
@@ -271,10 +282,7 @@ class GraduadoRepository implements IGraduadoRepository
             $graduado->dni = $graduadoParaRegistroDTO->dni;
             $graduado->fecha_nacimiento = $graduadoParaRegistroDTO->fecha_nacimiento;
             $graduado->contacto = $graduadoParaRegistroDTO->contacto;
-            $graduado->ocupacion_trabajo = $graduadoParaRegistroDTO->ocupacion_trabajo;
-            $graduado->ocupacion_empresa = $graduadoParaRegistroDTO->ocupacion_empresa;
-            $graduado->ocupacion_sector = $graduadoParaRegistroDTO->ocupacion_sector;
-            $graduado->ocupacion_informacion_adicional = $graduadoParaRegistroDTO->ocupacion_informacion_adicional;
+            $graduado->ocupaciones = $graduadoParaRegistroDTO->ocupaciones;
             $graduado->experiencia_anios = $graduadoParaRegistroDTO->experiencia_anios;
             $graduado->habilidades_competencias = $graduadoParaRegistroDTO->habilidades_competencias;
             $graduado->cv = $graduadoParaRegistroDTO->cv;
@@ -319,6 +327,18 @@ class GraduadoRepository implements IGraduadoRepository
                 }
             }
 
+            $graduado->ocupaciones()->delete();
+            foreach ($graduadoParaRegistroDTO->ocupaciones as $ocupacionData) {
+                $ocupacion = Ocupacion::firstOrCreate([
+                    'ocupacion_trabajo' => $ocupacionData['ocupacion_trabajo'],
+                    'ocupacion_empresa' => $ocupacionData['ocupacion_empresa'],
+                    'ocupacion_sector' => $ocupacionData['ocupacion_sector'],
+                    'ocupacion_informacion_adicional' => $ocupacionData['ocupacion_informacion_adicional'],
+                    'graduado_id' => $graduado->id
+                ]);
+            }
+
+
             if ($graduadoParaRegistroDTO->formacion) {
                 $graduado->formaciones()->delete();
                 foreach ($graduadoParaRegistroDTO->formacion as $formacionData) {
@@ -352,9 +372,20 @@ class GraduadoRepository implements IGraduadoRepository
 
     public function obtenerGraduadosPorValidar($cantPagina = 10)
     {
-        $graduados = Graduado::where('validado', 'false')->with(['carreras.departamento'])->paginate($cantPagina);
-
+        $graduados = Graduado::where('validado', 'false')
+            ->with(['carreras.departamento', 'ocupaciones'])
+            ->paginate($cantPagina);
+    
         $graduadosDTOs = $graduados->getCollection()->map(function ($graduado) {
+            $ocupaciones = $graduado->ocupaciones->map(function ($ocupacion) {
+                return [
+                    'trabajo' => $this->formatearTrabajo($ocupacion->trabajo),
+                    'empresa' => $ocupacion->empresa,
+                    'sector' => $this->formatearSectorTrabajo($ocupacion->sector),
+                    'informacion_adicional' => $ocupacion->informacion_adicional,
+                ];
+            })->toArray();
+    
             return new GraduadoPorValidarDTO(
                 $graduado->id,
                 $graduado->nombre,
@@ -362,20 +393,18 @@ class GraduadoRepository implements IGraduadoRepository
                 $graduado->dni,
                 $graduado->fecha_nacimiento,
                 $this->formatearCarreras($graduado->carreras),
-                $this->formatearTrabajo($graduado->ocupacion_trabajo),
-                $graduado->ocupacion_empresa,
-                $this->formatearSectorTrabajo($graduado->ocupacion_sector),
-                $graduado->ocupacion_informacion_adicional,
+                $ocupaciones,
                 $this->formatearExperiencia($graduado->experiencia_anios),
                 $graduado->habilidades_competencias,
                 $graduado->cv
             );
         });
-
+    
         $graduados->setCollection($graduadosDTOs);
-
+    
         return $graduados;
     }
+    
 
     public function aprobarGraduado($graduado_id)
     {

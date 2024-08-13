@@ -11,10 +11,7 @@ class GraduadoParaRegistroDTO
     public array $ciudad;
     public string $contacto;
     public ?array $carreras;
-    public ?string $ocupacion_trabajo;
-    public ?string $ocupacion_empresa;
-    public ?string $ocupacion_sector;
-    public ?string $ocupacion_informacion_adicional;
+    public array $ocupaciones;
     public ?string $experiencia_anios;
     public ?string $habilidades_competencias;
     public ?array $formacion;
@@ -38,10 +35,7 @@ class GraduadoParaRegistroDTO
         bool $interes_comunidad,
         bool $interes_oferta,
         bool $interes_demanda,
-        ?string $ocupacion_trabajo = null,
-        ?string $ocupacion_empresa = null,
-        ?string $ocupacion_sector = null,
-        ?string $ocupacion_informacion_adicional = null,
+        array $ocupaciones,
         ?string $experiencia_anios = null,
         ?string $habilidades_competencias = null,
         ?array $formacion = null,
@@ -58,10 +52,7 @@ class GraduadoParaRegistroDTO
         $this->ciudad = $ciudad;
         $this->contacto = $contacto;
         $this->carreras = $carreras;
-        $this->ocupacion_trabajo = $ocupacion_trabajo;
-        $this->ocupacion_empresa = $ocupacion_empresa;
-        $this->ocupacion_sector = $ocupacion_sector;
-        $this->ocupacion_informacion_adicional = $ocupacion_informacion_adicional;
+        $this->ocupaciones = $ocupaciones;
         $this->experiencia_anios = $experiencia_anios;
         $this->habilidades_competencias = $habilidades_competencias;
         $this->formacion = $formacion;
