@@ -142,7 +142,7 @@ class GraduadoRepository implements IGraduadoRepository
                 $graduado->interes_comunidad,
                 $graduado->interes_oferta,
                 $graduado->interes_demanda,
-                $graduado->ocupaciones,
+                $graduado->ocupaciones ? $graduado->ocupaciones->toArray() : null,
                 $graduado->experiencia_anios,
                 $graduado->habilidades_competencias,
                 $graduado->formaciones ? $graduado->formaciones->toArray() : null,

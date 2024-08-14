@@ -11,7 +11,7 @@ class GraduadoParaEditarDTO
     public string $fecha_nacimiento;
     public CiudadDTO $ciudad;
     public ?array $carreras;
-    public array $ocupaciones;
+    public ?array $ocupaciones;
     public ?string $experiencia_anios;
     public ?string $habilidades_competencias;
     public ?array $formacion;
@@ -38,7 +38,7 @@ class GraduadoParaEditarDTO
         bool $interes_comunidad,
         bool $interes_oferta,
         bool $interes_demanda,
-        array $ocupaciones,
+        ?array $ocupaciones = null,
         ?string $experiencia_anios = null,
         ?string $habilidades_competencias = null,
         ?array $formacion = null,
@@ -55,7 +55,7 @@ class GraduadoParaEditarDTO
         $this->ciudad = new CiudadDTO($ciudad_nombre, $ciudad_latitud, $ciudad_longitud, $ciudad_pais);
         $this->contacto = $contacto;
         $this->carreras = $carreras;
-        $this->ocupaciones;
+        $this->ocupaciones = $ocupaciones;
         $this->experiencia_anios = $experiencia_anios;
         $this->habilidades_competencias = $habilidades_competencias;
         $this->formacion = $formacion;
