@@ -80,12 +80,12 @@ class GraduadoRepository implements IGraduadoRepository
         foreach ($graduadosPorCiudad as $ciudadId => $graduados) {
             $ciudad = $graduados->first()->ciudad;
             $graduadoDTOs = $graduados->map(function ($graduado) use ($isAdmin) {
-                $ocupaciones = $graduado->ocupaciones->map(function ($ocupacion) use ($isAdmin) {
+                $ocupaciones = $graduado->ocupaciones->map(function ($ocupacion) use ($isAdmin, $graduado) {
                     return [
-                        'trabajo' => $isAdmin || $ocupacion->visibilidad ? $ocupacion->trabajo : null,
-                        'empresa' => $isAdmin || $ocupacion->visibilidad ? $ocupacion->empresa : null,
-                        'sector' => $isAdmin || $ocupacion->visibilidad ? $ocupacion->sector : null,
-                        'informacion_adicional' => $isAdmin || $ocupacion->visibilidad ? $ocupacion->informacion_adicional : null,
+                        'ocupacion_trabajo' => $isAdmin || $graduado->visibilidad_laboral ? $ocupacion->ocupacion_trabajo : null,
+                        'ocupacion_empresa' => $isAdmin || $graduado->visibilidad_laboral ? $ocupacion->ocupacion_empresa : null,
+                        'ocupacion_sector' => $isAdmin || $graduado->visibilidad_laboral ? $ocupacion->ocupacion_sector : null,
+                        'ocupacion_informacion_adicional' => $isAdmin || $graduado->visibilidad_laboral ? $ocupacion->ocupacion_informacion_adicional : null,
                     ];
                 })->toArray();
 
@@ -377,12 +377,12 @@ class GraduadoRepository implements IGraduadoRepository
             ->paginate($cantPagina);
     
         $graduadosDTOs = $graduados->getCollection()->map(function ($graduado) {
-            $ocupaciones = $graduado->ocupaciones->map(function ($ocupacion) {
+            $ocupaciones = $graduado->ocupaciones->map(function ($ocupacion) use ($graduado) {
                 return [
-                    'trabajo' => $this->formatearTrabajo($ocupacion->trabajo),
-                    'empresa' => $ocupacion->empresa,
-                    'sector' => $this->formatearSectorTrabajo($ocupacion->sector),
-                    'informacion_adicional' => $ocupacion->informacion_adicional,
+                    'ocupacion_trabajo' => $this->formatearTrabajo($ocupacion->ocupacion_trabajo),
+                    'ocupacion_empresa' => $ocupacion->ocupacion_empresa,
+                    'ocupacion_sector' => $this->formatearSectorTrabajo($ocupacion->ocupacion_sector),
+                    'ocupacion_informacion_adicional' => $ocupacion->ocupacion_informacion_adicional,
                 ];
             })->toArray();
     
