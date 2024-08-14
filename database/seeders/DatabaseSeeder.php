@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             CarreraGraduadoSeeder::class,
             ContactoGraduadoSeeder::class,
             FormacionGraduadoSeeder::class,
+            OcupacionGraduadoSeeder::class
         ]);
     }
 }
