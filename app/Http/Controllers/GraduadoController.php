@@ -495,7 +495,7 @@ class GraduadoController extends Controller
     {
         try {
             $filters = $this->getRequestFilters($request);
-            $ciudadesConGraduados = $this->graduadoRepository->obtenerGraduadosConFiltros($filters);
+            $ciudadesConGraduados = $this->graduadoRepository->obtenerGraduadosConFiltros($filters, true);
 
             $graduadosList = $this->crearListaGraduadosParaExcel($ciudadesConGraduados);
 
