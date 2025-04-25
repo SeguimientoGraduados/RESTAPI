@@ -282,7 +282,7 @@ class GraduadoRepository implements IGraduadoRepository
             $graduado->dni = $graduadoParaRegistroDTO->dni;
             $graduado->fecha_nacimiento = $graduadoParaRegistroDTO->fecha_nacimiento;
             $graduado->contacto = $graduadoParaRegistroDTO->contacto;
-            $graduado->ocupaciones = $graduadoParaRegistroDTO->ocupaciones;
+            //$graduado->ocupaciones = $graduadoParaRegistroDTO->ocupaciones;
             $graduado->experiencia_anios = $graduadoParaRegistroDTO->experiencia_anios;
             $graduado->habilidades_competencias = $graduadoParaRegistroDTO->habilidades_competencias;
             $graduado->cv = $graduadoParaRegistroDTO->cv;
