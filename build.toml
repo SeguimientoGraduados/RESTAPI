@@ -3,7 +3,6 @@ nixPkgs = ["php81", "composer"]
 
 [phases.build]
 cmds = [
-  "composer install --no-dev --optimize-autoloader",
   "mkdir -p storage/framework/cache",
   "mkdir -p storage/framework/sessions",
   "mkdir -p storage/framework/views",
