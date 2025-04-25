@@ -5,7 +5,7 @@ nixPkgs = ["php81", "composer"]
 cmds = [
   "composer install --no-dev --optimize-autoloader",
   "php artisan config:cache",
-  "mkdir -p storage/framework/cache/data",
+  "mkdir -p storage/framework/cache",
   "mkdir -p storage/framework/sessions",
   "mkdir -p storage/framework/views",
   "chmod -R 775 storage bootstrap/cache"
