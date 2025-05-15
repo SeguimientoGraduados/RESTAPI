@@ -19,7 +19,7 @@ use App\Imports\GraduadosImport;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Illuminate\Support\Facades\Log;
 
-
+ini_set('memory_limit', '-1');
 class GraduadoController extends Controller
 {
     private IGraduadoRepository $graduadoRepository;
@@ -522,9 +522,10 @@ class GraduadoController extends Controller
     public function importarGraduadosCsv(Request $request)
     {
         $request->validate([
-            'file' => 'required|mimes:csv,txt'
+            'file' => 'required|mimes:csv,txt,xlsx,xls'
         ]);
-
+        
+        set_time_limit(0);
         try {
             Excel::import(new GraduadosImport, $request->file('file'));
             return response()->json(['message' => 'Archivo importado exitosamente.'], 200);

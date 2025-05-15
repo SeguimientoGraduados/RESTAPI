@@ -13,7 +13,9 @@ return new class extends Migration
     {
         Schema::create('graduados_importados', function (Blueprint $table) {
             $table->id();
-            $table->string('dni');
+            $table->string('dni')->nullable();
+            $table->string('nombre_final');
+            $table->date('fecha_egreso');
             $table->string('carrera');
         });
     }

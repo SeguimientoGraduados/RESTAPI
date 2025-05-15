@@ -13,5 +13,7 @@ class GraduadoImportado extends Model
     protected $fillable = [
         'dni',
         'carrera',
+        'nombre_final',
+        'fecha_egreso',
     ];
 }
